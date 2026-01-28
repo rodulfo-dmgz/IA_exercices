@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>IA Deep Learning - Comment l'IA "voit" les images</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e1a;
+            --panel: #1e293b;
+            --panel-light: #334155;
+            --accent: #06b6d4;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --neuron-off: #1e293b;
+            --neuron-on: #06b6d4;
+            --connection: #334155;
+            --connection-active: #06b6d4;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Introduction */
+        .intro-box {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--accent);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .intro-box h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .intro-box p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .intro-box .highlight {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .intro-box .highlight strong {
+            color: var(--accent);
+        }
+
+        /* Layout principal */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr 280px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1000px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Zone Input */
+        .input-zone {
+            background: var(--panel);
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .zone-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .preview-box {
+            height: 140px;
+            background: var(--bg);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            border: 3px solid var(--panel-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-box.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+        }
+
+        .preview-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .preview-box .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            top: 0;
+            animation: scan 1.5s linear infinite;
+            opacity: 0;
+        }
+
+        .preview-box.active .scan-line {
+            opacity: 1;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        /* Catégories d'images */
+        .category-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .item-btn {
+            background: var(--bg);
+            border: 2px solid var(--panel-light);
+            color: var(--text);
+            padding: 12px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .item-btn:hover {
+            border-color: var(--accent);
+            background: rgba(6, 182, 212, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .item-btn.selected {
+            border-color: var(--accent);
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        .item-btn .emoji {
+            font-size: 1.8rem;
+        }
+
+        .item-btn.error {
+            border-color: #f59e0b;
+        }
+
+        .item-btn.error:hover {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        /* Zone réseau */
+        .network-zone {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            min-height: 500px;
+        }
+
+        .network-container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Couches */
+        .layer {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 5;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        .layer-label {
+            font-size: 0.7rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .layer-sublabel {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: -5px;
+            margin-bottom: 5px;
+        }
+
+        .neuron {
+            width: 50px;
+            height: 28px;
+            border-radius: 14px;
+            background: var(--neuron-off);
+            border: 2px solid var(--panel-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            color: var(--text-muted);
+            padding: 0 4px;
+            cursor: default;
+            position: relative;
+        }
+
+        .neuron.on {
+            background: var(--neuron-on);
+            color: var(--bg);
+            font-weight: bold;
+            border-color: white;
+            box-shadow: 0 0 15px var(--accent);
+            transform: scale(1.1);
+        }
+
+        .neuron.highlight {
+            animation: pulse-neuron 0.5s ease;
+        }
+
+        @keyframes pulse-neuron {
+            0%, 100% { transform: scale(1.1); }
+            50% { transform: scale(1.25); }
+        }
+
+        /* Couche de sortie spéciale */
+        .output-neuron {
+            width: 70px;
+            height: 45px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
+        .output-neuron .confidence {
+            font-size: 0.6rem;
+            opacity: 0.7;
+        }
+
+        /* Zone verdict */
+        .verdict-zone {
+            background: var(--panel);
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .result-box {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--panel-light);
+            transition: all 0.3s;
+        }
+
+        .result-box.success {
+            border-color: #22c55e;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+        }
+
+        .result-box.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+
+        .result-emoji {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .result-confidence {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .confidence-bar {
+            height: 8px;
+            background: var(--panel-light);
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #22c55e);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .confidence-fill.low {
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+        }
+
+        /* Log d'analyse */
+        .analysis-log {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .log-step.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .log-step .step-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--panel);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .log-step .step-text {
+            color: var(--text-muted);
+        }
+
+        .log-step .step-text strong {
+            color: var(--accent);
+        }
+
+        /* Explications */
+        .explanation-box {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .explanation-title {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .explanation-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Bouton reset */
+        .btn-reset {
+            background: var(--panel-light);
+            border: none;
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn-reset:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Légende */
+        .legend {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.off { background: var(--neuron-off); border: 1px solid var(--panel-light); }
+        .legend-dot.on { background: var(--neuron-on); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>🧠 Comment l'IA "voit" les images ?</h1>
+    <p>Découvrez le fonctionnement d'un réseau de neurones couche par couche</p>
+</div>
+
+<!-- Introduction -->
+<div class="intro-box">
+    <h3>🎯 Qu'est-ce qu'un réseau de neurones ?</h3>
+    <p>
+        Quand vous regardez une pomme, votre cerveau analyse automatiquement : la couleur, la forme, la taille, la texture... 
+        Un réseau de neurones fait pareil, mais avec des calculs mathématiques !
+    </p>
+    <div class="highlight">
+        <strong>Comment ça marche :</strong> L'image entre à gauche (pixels), traverse plusieurs couches qui détectent des caractéristiques 
+        de plus en plus complexes, et sort à droite avec une prédiction. Cliquez sur un objet pour voir l'analyse en direct !
+    </div>
+</div>
+
+<!-- Layout principal -->
+<div class="main-layout">
+    <!-- Zone Input -->
+    <div class="input-zone">
+        <div class="zone-title">📷 Image d'entrée</div>
+        
+        <div class="preview-box" id="preview">
+            <div class="scan-line"></div>
+            <span id="preview-emoji">❓</span>
+            <span class="preview-label" id="preview-label">Sélectionnez un objet</span>
+        </div>
+
+        <div class="category-label">🍎 Fruits</div>
+        <div class="btn-grid">
+            <button class="item-btn" onclick="analyze('pomme_rouge', '🍎', 'Pomme Rouge')">
+                <span class="emoji">🍎</span>
+                <span>Pomme</span>
+            </button>
+            <button class="item-btn" onclick="analyze('pomme_verte', '🍏', 'Pomme Verte')">
+                <span class="emoji">🍏</span>
+                <span>Granny</span>
+            </button>
+            <button class="item-btn" onclick="analyze('orange', '🍊', 'Orange')">
+                <span class="emoji">🍊</span>
+                <span>Orange</span>
+            </button>
+            <button class="item-btn" onclick="analyze('banane', '🍌', 'Banane')">
+                <span class="emoji">🍌</span>
+                <span>Banane</span>
+            </button>
+            <button class="item-btn" onclick="analyze('cerise', '🍒', 'Cerises')">
+                <span class="emoji">🍒</span>
+                <span>Cerises</span>
+            </button>
+            <button class="item-btn" onclick="analyze('raisin', '🍇', 'Raisin')">
+                <span class="emoji">🍇</span>
+                <span>Raisin</span>
+            </button>
+        </div>
+
+        <div class="category-label">🚗 Autres objets</div>
+        <div class="btn-grid">
+            <button class="item-btn" onclick="analyze('voiture', '🚗', 'Voiture')">
+                <span class="emoji">🚗</span>
+                <span>Voiture</span>
+            </button>
+            <button class="item-btn" onclick="analyze('chat', '🐱', 'Chat')">
+                <span class="emoji">🐱</span>
+                <span>Chat</span>
+            </button>
+        </div>
+
+        <div class="category-label">⚠️ Tests difficiles</div>
+        <div class="btn-grid">
+            <button class="item-btn error" onclick="analyze('tomate', '🍅', 'Tomate')">
+                <span class="emoji">🍅</span>
+                <span>Tomate ?</span>
+            </button>
+            <button class="item-btn error" onclick="analyze('bruit', '📺', 'Bruit')">
+                <span class="emoji">📺</span>
+                <span>Bruit</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Zone Réseau -->
+    <div class="network-zone">
+        <div class="network-container" id="network">
+            <canvas id="canvas"></canvas>
+
+            <!-- Couche 1 : Entrée (Pixels) -->
+            <div class="layer" id="layer-input">
+                <div class="layer-label">Entrée</div>
+                <div class="layer-sublabel">Pixels bruts</div>
+                <div class="neuron" data-layer="input">R</div>
+                <div class="neuron" data-layer="input">G</div>
+                <div class="neuron" data-layer="input">B</div>
+                <div class="neuron" data-layer="input">...</div>
+                <div class="neuron" data-layer="input">...</div>
+                <div class="neuron" data-layer="input">...</div>
+            </div>
+
+            <!-- Couche 2 : Couleurs & Formes basiques -->
+            <div class="layer" id="layer-basic">
+                <div class="layer-label">Couche 1</div>
+                <div class="layer-sublabel">Couleurs & Formes</div>
+                <div class="neuron" data-layer="basic" data-feature="rouge">Rouge</div>
+                <div class="neuron" data-layer="basic" data-feature="vert">Vert</div>
+                <div class="neuron" data-layer="basic" data-feature="jaune">Jaune</div>
+                <div class="neuron" data-layer="basic" data-feature="orange">Orange</div>
+                <div class="neuron" data-layer="basic" data-feature="rond">Rond</div>
+                <div class="neuron" data-layer="basic" data-feature="allonge">Allongé</div>
+                <div class="neuron" data-layer="basic" data-feature="petit">Petit</div>
+                <div class="neuron" data-layer="basic" data-feature="grand">Grand</div>
+            </div>
+
+            <!-- Couche 3 : Caractéristiques avancées -->
+            <div class="layer" id="layer-advanced">
+                <div class="layer-label">Couche 2</div>
+                <div class="layer-sublabel">Détails</div>
+                <div class="neuron" data-layer="advanced" data-feature="tige">Tige</div>
+                <div class="neuron" data-layer="advanced" data-feature="feuille">Feuille</div>
+                <div class="neuron" data-layer="advanced" data-feature="texture_lisse">Lisse</div>
+                <div class="neuron" data-layer="advanced" data-feature="texture_rugueux">Rugueux</div>
+                <div class="neuron" data-layer="advanced" data-feature="groupe">En groupe</div>
+                <div class="neuron" data-layer="advanced" data-feature="seul">Seul</div>
+                <div class="neuron" data-layer="advanced" data-feature="courbe">Courbé</div>
+                <div class="neuron" data-layer="advanced" data-feature="symetrique">Symétrique</div>
+            </div>
+
+            <!-- Couche 4 : Sortie -->
+            <div class="layer" id="layer-output">
+                <div class="layer-label">Sortie</div>
+                <div class="layer-sublabel">Prédictions</div>
+                <div class="neuron output-neuron" data-layer="output" data-class="pomme">🍎 Pomme<br><span class="confidence">0%</span></div>
+                <div class="neuron output-neuron" data-layer="output" data-class="orange">🍊 Orange<br><span class="confidence">0%</span></div>
+                <div class="neuron output-neuron" data-layer="output" data-class="banane">🍌 Banane<br><span class="confidence">0%</span></div>
+                <div class="neuron output-neuron" data-layer="output" data-class="cerise">🍒 Cerise<br><span class="confidence">0%</span></div>
+                <div class="neuron output-neuron" data-layer="output" data-class="raisin">🍇 Raisin<br><span class="confidence">0%</span></div>
+                <div class="neuron output-neuron" data-layer="output" data-class="autre">❓ Autre<br><span class="confidence">0%</span></div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot off"></div> Neurone inactif</div>
+            <div class="legend-item"><div class="legend-dot on"></div> Neurone activé</div>
+        </div>
+    </div>
+
+    <!-- Zone Verdict -->
+    <div class="verdict-zone">
+        <div class="zone-title">📊 Résultat</div>
+
+        <div class="result-box" id="result-box">
+            <div class="result-emoji" id="result-emoji">🤔</div>
+            <div class="result-title" id="result-title">En attente...</div>
+            <div class="result-confidence" id="result-confidence">Sélectionnez un objet</div>
+            <div class="confidence-bar">
+                <div class="confidence-fill" id="confidence-fill"></div>
+            </div>
+        </div>
+
+        <div class="zone-title">📝 Journal d'analyse</div>
+        <div class="analysis-log" id="analysis-log">
+            <div class="log-step visible">
+                <span class="step-icon">👋</span>
+                <span class="step-text">Cliquez sur un objet pour démarrer l'analyse...</span>
+            </div>
+        </div>
+
+        <div class="explanation-box" id="explanation-box">
+            <div class="explanation-title">💡 Explication</div>
+            <div class="explanation-text" id="explanation-text">
+                Chaque couche du réseau détecte des caractéristiques de plus en plus abstraites. 
+                La première couche voit les couleurs, la dernière reconnaît les objets !
+            </div>
+        </div>
+
+        <button class="btn-reset" onclick="reset()">🔄 Réinitialiser</button>
+    </div>
+</div>
+
+<div class="footer">
+    Créé par <strong>Rodulfo DOMINGUEZ</strong> — Formation IA & Machine Learning
+</div>
+
+<script>
+// ===============================
+// CONFIGURATION DES OBJETS
+// ===============================
+
+const OBJECTS = {
+    pomme_rouge: {
+        name: "Pomme Rouge",
+        emoji: "🍎",
+        basic: ["rouge", "rond", "grand"],
+        advanced: ["tige", "lisse", "seul", "symetrique"],
+        output: { pomme: 94, orange: 3, banane: 0, cerise: 2, raisin: 0, autre: 1 },
+        explanation: "Couleur rouge vif + forme ronde + tige visible = le réseau est très confiant que c'est une pomme !",
+        steps: [
+            "Détection de pixels rouges dominants (R: 220, G: 50, B: 50)",
+            "Forme circulaire identifiée (ratio largeur/hauteur ≈ 1)",
+            "Tige détectée en haut de l'objet",
+            "Surface lisse sans texture granuleuse",
+            "Classification : POMME avec 94% de confiance"
+        ]
+    },
+    pomme_verte: {
+        name: "Pomme Verte (Granny)",
+        emoji: "🍏",
+        basic: ["vert", "rond", "grand"],
+        advanced: ["tige", "lisse", "seul", "symetrique"],
+        output: { pomme: 91, orange: 1, banane: 2, cerise: 0, raisin: 4, autre: 2 },
+        explanation: "Même forme que la pomme rouge, mais verte. Le réseau a appris que les pommes peuvent être vertes !",
+        steps: [
+            "Détection de pixels verts (R: 120, G: 200, B: 80)",
+            "Forme circulaire confirmée",
+            "Tige caractéristique identifiée",
+            "Malgré la couleur différente, la FORME correspond à 'pomme'",
+            "Classification : POMME avec 91% de confiance"
+        ]
+    },
+    orange: {
+        name: "Orange",
+        emoji: "🍊",
+        basic: ["orange", "rond", "grand"],
+        advanced: ["texture_rugueux", "seul", "symetrique"],
+        output: { pomme: 5, orange: 92, banane: 1, cerise: 0, raisin: 0, autre: 2 },
+        explanation: "Orange + rond + texture granuleuse (peau d'orange) = le réseau distingue bien l'orange de la pomme !",
+        steps: [
+            "Détection de pixels orangés (R: 255, G: 165, B: 0)",
+            "Forme sphérique détectée",
+            "Texture RUGUEUSE identifiée (grain de la peau)",
+            "Pas de tige visible (différent de la pomme)",
+            "Classification : ORANGE avec 92% de confiance"
+        ]
+    },
+    banane: {
+        name: "Banane",
+        emoji: "🍌",
+        basic: ["jaune", "allonge", "grand"],
+        advanced: ["courbe", "lisse", "seul"],
+        output: { pomme: 0, orange: 2, banane: 96, cerise: 0, raisin: 0, autre: 2 },
+        explanation: "Jaune + forme allongée + courbée = signature unique de la banane, très facile à reconnaître !",
+        steps: [
+            "Détection de pixels jaunes (R: 255, G: 225, B: 50)",
+            "Forme ALLONGÉE détectée (ratio > 3:1)",
+            "Courbure caractéristique mesurée",
+            "Aucune autre classe n'a cette combinaison",
+            "Classification : BANANE avec 96% de confiance"
+        ]
+    },
+    cerise: {
+        name: "Cerises",
+        emoji: "🍒",
+        basic: ["rouge", "rond", "petit"],
+        advanced: ["tige", "lisse", "groupe", "symetrique"],
+        output: { pomme: 8, orange: 0, banane: 0, cerise: 89, raisin: 2, autre: 1 },
+        explanation: "Rouge + petit + en groupe avec tiges = cerises. La taille et le groupement font la différence avec la pomme !",
+        steps: [
+            "Détection de pixels rouges foncés",
+            "PETITE taille détectée (< 5cm estimé)",
+            "Plusieurs objets EN GROUPE",
+            "Tiges fines reliant les fruits",
+            "Classification : CERISE avec 89% de confiance"
+        ]
+    },
+    raisin: {
+        name: "Raisin",
+        emoji: "🍇",
+        basic: ["vert", "rond", "petit"],
+        advanced: ["lisse", "groupe", "symetrique"],
+        output: { pomme: 2, orange: 0, banane: 0, cerise: 5, raisin: 91, autre: 2 },
+        explanation: "Petits + ronds + en grappe = raisin. Le réseau a appris à reconnaître les grappes !",
+        steps: [
+            "Détection de pixels violets/verts",
+            "Multiples petites formes rondes",
+            "Configuration en GRAPPE détectée",
+            "Taille unitaire très petite",
+            "Classification : RAISIN avec 91% de confiance"
+        ]
+    },
+    voiture: {
+        name: "Voiture",
+        emoji: "🚗",
+        basic: ["rouge", "allonge", "grand"],
+        advanced: ["symetrique"],
+        output: { pomme: 0, orange: 0, banane: 3, cerise: 0, raisin: 0, autre: 97 },
+        explanation: "Ce n'est pas un fruit ! Le réseau classe en 'Autre' car aucune caractéristique de fruit n'est détectée.",
+        steps: [
+            "Forme rectangulaire/allongée détectée",
+            "Couleur variable (ici rouge)",
+            "Aucune caractéristique de fruit",
+            "Pas de texture organique",
+            "Classification : AUTRE avec 97% (ce n'est pas un fruit !)"
+        ]
+    },
+    chat: {
+        name: "Chat",
+        emoji: "🐱",
+        basic: ["orange", "rond"],
+        advanced: ["texture_rugueux"],
+        output: { pomme: 0, orange: 12, banane: 0, cerise: 0, raisin: 0, autre: 88 },
+        explanation: "Intéressant : le chat orange a quelques points communs avec une orange (couleur, forme de la tête). Mais le réseau sait que ce n'est pas un fruit !",
+        steps: [
+            "Détection de pixels orangés/beiges",
+            "Formes complexes multiples (tête, corps)",
+            "Texture 'poils' ≠ peau de fruit",
+            "Confusion possible avec orange (12%)",
+            "Classification : AUTRE avec 88%"
+        ]
+    },
+    tomate: {
+        name: "Tomate",
+        emoji: "🍅",
+        basic: ["rouge", "rond", "grand"],
+        advanced: ["tige", "lisse", "seul", "symetrique"],
+        output: { pomme: 67, orange: 8, banane: 0, cerise: 5, raisin: 0, autre: 20 },
+        explanation: "⚠️ PIÈGE ! La tomate ressemble beaucoup à une pomme (rouge, ronde, tige). Le réseau se trompe car il n'a pas été entraîné sur les tomates !",
+        steps: [
+            "Détection de pixels rouges vifs",
+            "Forme ronde parfaite",
+            "Tige verte en étoile visible",
+            "⚠️ Très similaire à une pomme...",
+            "Classification : POMME avec 67% (ERREUR probable !)"
+        ]
+    },
+    bruit: {
+        name: "Bruit/Parasites",
+        emoji: "📺",
+        basic: [],
+        advanced: [],
+        output: { pomme: 15, orange: 18, banane: 12, cerise: 14, raisin: 16, autre: 25 },
+        explanation: "Quand l'image est du bruit aléatoire, le réseau n'est sûr de rien ! Les probabilités sont réparties car aucun pattern clair n'est détecté.",
+        steps: [
+            "Pixels aléatoires détectés",
+            "Aucune forme cohérente",
+            "Aucune couleur dominante",
+            "⚠️ Confiance très faible sur toutes les classes",
+            "Résultat : INCERTAIN (max 25% pour 'Autre')"
+        ]
+    }
+};
+
+// ===============================
+// VARIABLES GLOBALES
+// ===============================
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let currentAnalysis = null;
+let animationFrame = null;
+
+// ===============================
+// INITIALISATION
+// ===============================
+
+function init() {
+    resizeCanvas();
+    drawConnections();
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        drawConnections();
+    });
+}
+
+function resizeCanvas() {
+    const container = document.getElementById('network');
+    canvas.width = container.offsetWidth;
+    canvas.height = container.offsetHeight;
+}
+
+function drawConnections(activeNeurons = []) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    const layers = [
+        document.getElementById('layer-input'),
+        document.getElementById('layer-basic'),
+        document.getElementById('layer-advanced'),
+        document.getElementById('layer-output')
+    ];
+    
+    const containerRect = document.getElementById('network').getBoundingClientRect();
+    
+    for (let i = 0; i < layers.length - 1; i++) {
+        const neurons1 = layers[i].querySelectorAll('.neuron');
+        const neurons2 = layers[i + 1].querySelectorAll('.neuron');
+        
+        neurons1.forEach(n1 => {
+            const r1 = n1.getBoundingClientRect();
+            neurons2.forEach(n2 => {
+                const r2 = n2.getBoundingClientRect();
+                
+                const isActive = n1.classList.contains('on') && n2.classList.contains('on');
+                
+                ctx.beginPath();
+                ctx.strokeStyle = isActive ? 'rgba(6, 182, 212, 0.6)' : 'rgba(51, 65, 85, 0.3)';
+                ctx.lineWidth = isActive ? 2 : 0.5;
+                
+                ctx.moveTo(r1.right - containerRect.left, r1.top + r1.height/2 - containerRect.top);
+                ctx.lineTo(r2.left - containerRect.left, r2.top + r2.height/2 - containerRect.top);
+                ctx.stroke();
+            });
+        });
+    }
+}
+
+// ===============================
+// ANALYSE
+// ===============================
+
+async function analyze(type, emoji, name) {
+    if (currentAnalysis) return;
+    currentAnalysis = type;
+    
+    const obj = OBJECTS[type];
+    
+    // Mettre à jour l'aperçu
+    document.getElementById('preview-emoji').textContent = emoji;
+    document.getElementById('preview-label').textContent = name;
+    document.getElementById('preview').classList.add('active');
+    
+    // Mettre en surbrillance le bouton
+    document.querySelectorAll('.item-btn').forEach(btn => btn.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    
+    // Reset
+    resetNeurons();
+    resetLog();
+    document.getElementById('result-box').className = 'result-box';
+    document.getElementById('result-emoji').textContent = '⏳';
+    document.getElementById('result-title').textContent = 'Analyse...';
+    document.getElementById('result-confidence').textContent = 'Traitement en cours';
+    document.getElementById('confidence-fill').style.width = '0%';
+    
+    // Animation couche par couche
+    await activateLayer('input', 400);
+    await addLogStep(obj.steps[0], 0);
+    
+    await activateFeatures('basic', obj.basic, 500);
+    await addLogStep(obj.steps[1], 1);
+    await addLogStep(obj.steps[2], 2);
+    
+    await activateFeatures('advanced', obj.advanced.map(f => f.replace('texture_', '')), 500);
+    await addLogStep(obj.steps[3], 3);
+    
+    await activateOutput(obj.output, 600);
+    await addLogStep(obj.steps[4], 4);
+    
+    // Résultat final
+    showResult(obj);
+    
+    currentAnalysis = null;
+}
+
+function resetNeurons() {
+    document.querySelectorAll('.neuron').forEach(n => {
+        n.classList.remove('on', 'highlight');
+    });
+    document.querySelectorAll('.output-neuron .confidence').forEach(c => {
+        c.textContent = '0%';
+    });
+}
+
+function resetLog() {
+    document.getElementById('analysis-log').innerHTML = '';
+}
+
+async function activateLayer(layerName, duration) {
+    const neurons = document.querySelectorAll(`[data-layer="${layerName}"]`);
+    
+    for (let i = 0; i < neurons.length; i++) {
+        await sleep(50);
+        neurons[i].classList.add('on');
+    }
+    
+    drawConnections();
+    await sleep(duration);
+}
+
+async function activateFeatures(layerName, features, duration) {
+    const neurons = document.querySelectorAll(`[data-layer="${layerName}"]`);
+    
+    neurons.forEach(n => {
+        const feature = n.dataset.feature;
+        if (features.includes(feature)) {
+            n.classList.add('on', 'highlight');
+            setTimeout(() => n.classList.remove('highlight'), 300);
+        }
+    });
+    
+    drawConnections();
+    await sleep(duration);
+}
+
+async function activateOutput(output, duration) {
+    const neurons = document.querySelectorAll('[data-layer="output"]');
+    
+    let maxClass = '';
+    let maxValue = 0;
+    
+    for (const [className, value] of Object.entries(output)) {
+        if (value > maxValue) {
+            maxValue = value;
+            maxClass = className;
+        }
+    }
+    
+    neurons.forEach(n => {
+        const className = n.dataset.class;
+        const value = output[className] || 0;
+        
+        n.querySelector('.confidence').textContent = `${value}%`;
+        
+        if (className === maxClass) {
+            n.classList.add('on', 'highlight');
+            setTimeout(() => n.classList.remove('highlight'), 300);
+        }
+    });
+    
+    drawConnections();
+    await sleep(duration);
+}
+
+async function addLogStep(text, index) {
+    const log = document.getElementById('analysis-log');
+    
+    const step = document.createElement('div');
+    step.className = 'log-step';
+    step.innerHTML = `
+        <span class="step-icon">${index + 1}</span>
+        <span class="step-text">${text}</span>
+    `;
+    
+    log.appendChild(step);
+    
+    await sleep(100);
+    step.classList.add('visible');
+    
+    log.scrollTop = log.scrollHeight;
+}
+
+function showResult(obj) {
+    // Trouver la classe avec le score max
+    let maxClass = '';
+    let maxValue = 0;
+    
+    for (const [className, value] of Object.entries(obj.output)) {
+        if (value > maxValue) {
+            maxValue = value;
+            maxClass = className;
+        }
+    }
+    
+    const resultBox = document.getElementById('result-box');
+    const isError = obj.name === 'Tomate' || obj.name === 'Bruit/Parasites';
+    
+    resultBox.className = `result-box ${isError ? 'error' : 'success'}`;
+    
+    document.getElementById('result-emoji').textContent = obj.emoji;
+    document.getElementById('result-title').textContent = isError ? `⚠️ ${obj.name}` : obj.name;
+    document.getElementById('result-confidence').textContent = `Confiance : ${maxValue}%`;
+    
+    const fill = document.getElementById('confidence-fill');
+    fill.className = `confidence-fill ${maxValue < 70 ? 'low' : ''}`;
+    fill.style.width = `${maxValue}%`;
+    
+    document.getElementById('explanation-text').textContent = obj.explanation;
+    document.getElementById('preview').classList.remove('active');
+}
+
+// ===============================
+// UTILITAIRES
+// ===============================
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function reset() {
+    currentAnalysis = null;
+    
+    document.getElementById('preview-emoji').textContent = '❓';
+    document.getElementById('preview-label').textContent = 'Sélectionnez un objet';
+    document.getElementById('preview').classList.remove('active');
+    
+    document.querySelectorAll('.item-btn').forEach(btn => btn.classList.remove('selected'));
+    
+    resetNeurons();
+    drawConnections();
+    
+    document.getElementById('result-box').className = 'result-box';
+    document.getElementById('result-emoji').textContent = '🤔';
+    document.getElementById('result-title').textContent = 'En attente...';
+    document.getElementById('result-confidence').textContent = 'Sélectionnez un objet';
+    document.getElementById('confidence-fill').style.width = '0%';
+    document.getElementById('confidence-fill').className = 'confidence-fill';
+    
+    document.getElementById('analysis-log').innerHTML = `
+        <div class="log-step visible">
+            <span class="step-icon">👋</span>
+            <span class="step-text">Cliquez sur un objet pour démarrer l'analyse...</span>
+        </div>
+    `;
+    
+    document.getElementById('explanation-text').textContent = 
+        "Chaque couche du réseau détecte des caractéristiques de plus en plus abstraites. La première couche voit les couleurs, la dernière reconnaît les objets !";
+}
+
+// ===============================
+// DÉMARRAGE
+// ===============================
+
+window.onload = init;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+        :root {
+            --bg: #0f172a; 
+            --panel: #1e293b; 
+            --accent: #10b981;
+            --accent-light: #34d399;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { 
+            font-family: 'Space Grotesk', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-container { 
+            max-width: 950px; 
+            width: 100%; 
+            background: var(--panel); 
+            border-radius: 20px; 
+            padding: 25px; 
+            border: 1px solid #475569; 
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .intro {
+            text-align: justify;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .intro strong {
+            color: var(--accent);
+        }
+
+        /* Progression */
+        .progress-section {
+            background: #020617;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .progress-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-value.errors {
+            color: var(--error);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #334155;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Zone IA */
+        .ia-zone {
+            background: #020617;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 2px solid #334155;
+            min-height: 70px;
+        }
+
+        .ia-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .ia-avatar {
+            font-size: 40px;
+        }
+
+        .ia-status h3 {
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .ia-status p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Proposition de l'IA */
+        .ia-guess {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .guess-shape {
+            font-size: 3rem;
+            background: var(--panel);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 3px solid var(--accent);
+        }
+
+        .guess-arrow {
+            font-size: 2rem;
+            color: var(--text-muted);
+        }
+
+        .guess-category {
+            padding: 15px 25px;
+            background: var(--warning);
+            color: var(--bg);
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .guess-category.correct {
+            background: var(--accent);
+        }
+
+        .guess-category.wrong {
+            background: var(--error);
+        }
+
+        /* Bulle de pensée */
+        .thought-bubble {
+            background: var(--panel);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin: 15px auto;
+            max-width: 500px;
+            border-left: 4px solid var(--warning);
+            text-align: left;
+        }
+
+        .thought-bubble.error {
+            border-left-color: var(--error);
+        }
+
+        .thought-bubble.success {
+            border-left-color: var(--accent);
+        }
+
+        /* Historique des essais */
+        .attempts {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .attempt-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .attempt-badge.wrong {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+            text-decoration: line-through;
+        }
+
+        .attempt-badge.current {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        /* Boutons réponse */
+        .response-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-correct {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .btn-wrong {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Zone de formes */
+        .shape-pool { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 12px; 
+            justify-content: center; 
+            background: #020617; 
+            padding: 20px; 
+            border-radius: 15px; 
+            min-height: 80px; 
+            margin-bottom: 20px;
+            border: 2px solid #334155;
+        }
+
+        .shape { 
+            font-size: 38px; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            opacity: 0.6;
+            padding: 8px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+
+        .shape:hover { 
+            transform: scale(1.15); 
+            opacity: 1;
+            border-color: var(--accent);
+        }
+
+        .shape.learned {
+            opacity: 0.3;
+            pointer-events: none;
+            filter: grayscale(0.5);
+        }
+
+        .shape.current {
+            opacity: 1;
+            transform: scale(1.2);
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Catégories */
+        .categories-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .category-box { 
+            background: rgba(255,255,255,0.03); 
+            border: 2px dashed #475569; 
+            border-radius: 15px; 
+            min-height: 120px; 
+            padding: 15px; 
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-box:hover {
+            border-color: var(--accent);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .category-box.highlight {
+            border-color: var(--warning);
+            border-style: solid;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .category-box.correct-answer {
+            border-color: var(--accent);
+            border-style: solid;
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .category-box.clickable {
+            animation: pulse-border 1s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        }
+
+        .category-box h3 {
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .category-box .category-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .category-box .items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+            font-size: 1.8rem;
+            min-height: 40px;
+        }
+
+        .category-box .count {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Explication */
+        .explanation { 
+            background: #0f172a; 
+            padding: 15px; 
+            border-radius: 12px; 
+            font-size: 0.9rem; 
+            line-height: 1.6; 
+            border-left: 4px solid var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .explanation.warning {
+            border-left-color: var(--warning);
+        }
+
+        .explanation strong {
+            color: var(--accent);
+        }
+
+        .explanation .error-text {
+            color: var(--error);
+        }
+
+        /* Message correction */
+        .correction-prompt {
+            text-align: center;
+            color: var(--warning);
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Bouton reset */
+        .btn-reset {
+            background: #334155;
+            color: var(--text);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .btn-reset:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Message final */
+        .final-message {
+            text-align: center;
+            padding: 25px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 15px;
+            border: 2px solid var(--accent);
+            margin: 20px 0;
+        }
+
+        .final-message h3 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .final-message p {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <h2>🏷️ Apprentissage Supervisé : Vous êtes le Professeur !</h2>
+    
+    <p class="intro">
+        Dans l'apprentissage <strong>supervisé</strong>, l'IA apprend grâce à un <strong>professeur humain</strong> qui la corrige. 
+        Elle propose une réponse, vous lui dites si c'est <strong>correct ✓</strong> ou <strong>faux ✗</strong>. 
+        Si c'est faux, <strong>vous lui montrez</strong> la bonne réponse. Après plusieurs corrections, elle mémorise les règles !
+    </p>
+
+    <!-- Progression -->
+    <div class="progress-section">
+        <div class="progress-header">
+            <span class="progress-title">📊 Progression de l'entraînement</span>
+            <div class="progress-stats">
+                <div class="stat">
+                    <div class="stat-value" id="stat-learned">0</div>
+                    <div class="stat-label">Appris</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value errors" id="stat-errors">0</div>
+                    <div class="stat-label">Erreurs</div>
+                </div>
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- Zone IA -->
+    <div class="ia-zone" id="ia-zone">
+        <div class="ia-header">
+            <div class="ia-avatar" id="ia-avatar">🤖</div>
+            <div class="ia-status">
+                <h3 id="ia-title">IA Débutante</h3>
+                <p id="ia-subtitle">Cliquez sur un élément pour m'entraîner !</p>
+            </div>
+        </div>
+
+        <div id="ia-content">
+            <!-- Contenu dynamique -->
+        </div>
+    </div>
+
+    <!-- Formes à classer -->
+    <div class="shape-pool" id="pool">
+        <span class="shape" data-id="apple" data-cat="fruits" onclick="startLearning(this)">🍎</span>
+        <span class="shape" data-id="banana" data-cat="fruits" onclick="startLearning(this)">🍌</span>
+        <span class="shape" data-id="car" data-cat="vehicules" onclick="startLearning(this)">🚗</span>
+        <span class="shape" data-id="cat" data-cat="animaux" onclick="startLearning(this)">🐱</span>
+        <span class="shape" data-id="orange" data-cat="fruits" onclick="startLearning(this)">🍊</span>
+        <span class="shape" data-id="dog" data-cat="animaux" onclick="startLearning(this)">🐕</span>
+        <span class="shape" data-id="plane" data-cat="vehicules" onclick="startLearning(this)">✈️</span>
+        <span class="shape" data-id="grapes" data-cat="fruits" onclick="startLearning(this)">🍇</span>
+        <span class="shape" data-id="bike" data-cat="vehicules" onclick="startLearning(this)">🚲</span>
+        <span class="shape" data-id="rabbit" data-cat="animaux" onclick="startLearning(this)">🐰</span>
+    </div>
+
+    <!-- Catégories -->
+    <div class="categories-grid" id="categories-grid">
+        <div class="category-box" data-cat="fruits" onclick="teachCategory('fruits')">
+            <h3>🍎 Fruits</h3>
+            <p class="category-desc">Aliments végétaux sucrés</p>
+            <div class="items" id="items-fruits"></div>
+            <div class="count"><span id="count-fruits">0</span> élément(s)</div>
+        </div>
+        <div class="category-box" data-cat="animaux" onclick="teachCategory('animaux')">
+            <h3>🐾 Animaux</h3>
+            <p class="category-desc">Êtres vivants</p>
+            <div class="items" id="items-animaux"></div>
+            <div class="count"><span id="count-animaux">0</span> élément(s)</div>
+        </div>
+        <div class="category-box" data-cat="vehicules" onclick="teachCategory('vehicules')">
+            <h3>🚗 Véhicules</h3>
+            <p class="category-desc">Moyens de transport</p>
+            <div class="items" id="items-vehicules"></div>
+            <div class="count"><span id="count-vehicules">0</span> élément(s)</div>
+        </div>
+    </div>
+
+    <!-- Explication -->
+    <div class="explanation" id="explanation">
+        <strong>💡 Le principe :</strong> L'IA ne connaît rien au départ. Elle va <strong>deviner au hasard</strong>, 
+        et c'est vous qui lui apprenez en validant ou corrigeant ses réponses. C'est exactement comme ça que fonctionnent 
+        les vrais systèmes de Machine Learning !
+    </div>
+
+    <div id="final-zone"></div>
+
+    <button class="btn-reset" onclick="resetAll()">🔄 Recommencer l'entraînement</button>
+</div>
+
+<div class="footer">
+    Créé par <strong>Rodulfo DOMINGUEZ</strong> — Formation IA & Machine Learning
+</div>
+
+<script>
+// ===============================
+// ÉTAT GLOBAL
+// ===============================
+const state = {
+    mode: 'idle', // idle, guessing, waiting, correction
+    current: null, // { element, id, emoji, correctCat }
+    attempts: [], // catégories déjà essayées pour l'élément courant
+    currentGuess: null,
+    learned: {}, // { id: category }
+    errors: 0,
+    categories: { fruits: [], animaux: [], vehicules: [] }
+};
+
+const CATS = ['fruits', 'animaux', 'vehicules'];
+const CAT_NAMES = { fruits: 'Fruits', animaux: 'Animaux', vehicules: 'Véhicules' };
+const CAT_EMOJIS = { fruits: '🍎', animaux: '🐾', vehicules: '🚗' };
+
+// ===============================
+// DÉMARRER L'APPRENTISSAGE
+// ===============================
+function startLearning(element) {
+    if (state.mode === 'correction') return;
+    if (element.classList.contains('learned')) return;
+
+    // Reset
+    document.querySelectorAll('.shape').forEach(s => s.classList.remove('current'));
+    document.querySelectorAll('.category-box').forEach(c => c.classList.remove('highlight', 'correct-answer', 'clickable'));
+
+    // Sélectionner
+    element.classList.add('current');
+    state.current = {
+        element: element,
+        id: element.dataset.id,
+        emoji: element.textContent,
+        correctCat: element.dataset.cat
+    };
+    state.attempts = [];
+    state.mode = 'guessing';
+
+    // L'IA fait une proposition
+    setTimeout(() => makeGuess(), 500);
+}
+
+// ===============================
+// L'IA FAIT UNE PROPOSITION
+// ===============================
+function makeGuess() {
+    const { emoji, correctCat } = state.current;
+
+    // Catégories pas encore essayées
+    let available = CATS.filter(c => !state.attempts.includes(c));
+    
+    // Choisir au hasard
+    const guess = available[Math.floor(Math.random() * available.length)];
+    state.currentGuess = guess;
+    state.mode = 'waiting';
+
+    // Nombre d'essais
+    const attemptNum = state.attempts.length + 1;
+
+    // Mettre à jour l'interface
+    document.getElementById('ia-avatar').textContent = attemptNum === 1 ? '🤔' : '😅';
+    document.getElementById('ia-title').textContent = attemptNum === 1 ? 'Je réfléchis...' : `Essai n°${attemptNum}...`;
+    document.getElementById('ia-subtitle').textContent = attemptNum === 1 
+        ? 'Je ne connais pas encore cet élément' 
+        : 'Je réessaie avec une autre catégorie';
+
+    // Construire le contenu
+    let attemptsHTML = '';
+    if (state.attempts.length > 0) {
+        attemptsHTML = `
+            <div class="attempts">
+                ${state.attempts.map(a => `
+                    <span class="attempt-badge wrong">${CAT_EMOJIS[a]} ${CAT_NAMES[a]} ✗</span>
+                `).join('')}
+                <span class="attempt-badge current">${CAT_EMOJIS[guess]} ${CAT_NAMES[guess]} ?</span>
+            </div>
+        `;
+    }
+
+    document.getElementById('ia-content').innerHTML = `
+        <div class="thought-bubble ${state.attempts.length > 0 ? 'error' : ''}">
+            ${state.attempts.length === 0 
+                ? `🤷 Je ne sais pas ce qu'est ${emoji}... Je vais deviner au hasard !`
+                : `😓 D'accord, ce n'était pas ${CAT_NAMES[state.attempts[state.attempts.length-1]]}... Peut-être que c'est ${CAT_NAMES[guess]} ?`
+            }
+        </div>
+
+        ${attemptsHTML}
+
+        <div class="ia-guess">
+            <span class="guess-shape">${emoji}</span>
+            <span class="guess-arrow">→</span>
+            <span class="guess-category" id="guess-cat">${CAT_EMOJIS[guess]} ${CAT_NAMES[guess]} ?</span>
+        </div>
+
+        <div class="response-buttons">
+            <button class="btn btn-correct" onclick="respond(true)">✓ Correct !</button>
+            <button class="btn btn-wrong" onclick="respond(false)">✗ Non, c'est faux</button>
+        </div>
+    `;
+
+    // Surligner la catégorie proposée
+    document.querySelector(`[data-cat="${guess}"]`).classList.add('highlight');
+
+    // Explication
+    document.getElementById('explanation').className = 'explanation';
+    document.getElementById('explanation').innerHTML = `
+        <strong>🎯 L'IA propose :</strong> Elle pense que ${emoji} est un <strong>${CAT_NAMES[guess]}</strong>. 
+        Est-ce correct ? Si oui, cliquez sur <strong>✓ Correct</strong>. Sinon, cliquez sur <strong>✗ Faux</strong> 
+        et vous pourrez lui montrer la bonne réponse.
+    `;
+}
+
+// ===============================
+// RÉPONDRE À LA PROPOSITION
+// ===============================
+function respond(isCorrect) {
+    const { emoji, correctCat } = state.current;
+    const guess = state.currentGuess;
+
+    document.querySelectorAll('.category-box').forEach(c => c.classList.remove('highlight'));
+
+    if (isCorrect) {
+        // Bonne réponse !
+        learnSuccess(guess);
+    } else {
+        // Mauvaise réponse
+        state.errors++;
+        state.attempts.push(guess);
+        updateStats();
+
+        // Est-ce qu'il reste des catégories à essayer ?
+        const remaining = CATS.filter(c => !state.attempts.includes(c));
+
+        if (remaining.length === 1) {
+            // Il ne reste qu'une seule option = l'IA a trouvé par élimination
+            document.getElementById('ia-avatar').textContent = '💡';
+            document.getElementById('ia-title').textContent = 'Ah ! Par élimination...';
+            document.getElementById('ia-subtitle').textContent = `Il ne reste que ${CAT_NAMES[remaining[0]]} !`;
+
+            document.getElementById('ia-content').innerHTML = `
+                <div class="thought-bubble success">
+                    🧠 Si ce n'est ni ${state.attempts.map(a => CAT_NAMES[a]).join(', ni ')}... 
+                    alors ça ne peut être que <strong>${CAT_NAMES[remaining[0]]}</strong> !
+                </div>
+
+                <div class="attempts">
+                    ${state.attempts.map(a => `
+                        <span class="attempt-badge wrong">${CAT_EMOJIS[a]} ${CAT_NAMES[a]} ✗</span>
+                    `).join('')}
+                </div>
+
+                <div class="ia-guess">
+                    <span class="guess-shape">${emoji}</span>
+                    <span class="guess-arrow">→</span>
+                    <span class="guess-category correct">${CAT_EMOJIS[remaining[0]]} ${CAT_NAMES[remaining[0]]} !</span>
+                </div>
+            `;
+
+            document.querySelector(`[data-cat="${remaining[0]}"]`).classList.add('correct-answer');
+
+            document.getElementById('explanation').innerHTML = `
+                <strong>🎓 Apprentissage par élimination !</strong> Après ${state.attempts.length} erreur(s), 
+                l'IA a trouvé par déduction. Elle mémorise maintenant que ${emoji} = <strong>${CAT_NAMES[remaining[0]]}</strong>.
+            `;
+
+            setTimeout(() => learnSuccess(remaining[0]), 2000);
+        } else {
+            // Il reste plusieurs options = passer en mode correction OU réessayer
+            state.mode = 'correction';
+
+            document.getElementById('ia-avatar').textContent = '😕';
+            document.getElementById('ia-title').textContent = 'Je me suis trompé...';
+            document.getElementById('ia-subtitle').textContent = 'Aidez-moi !';
+
+            document.getElementById('ia-content').innerHTML = `
+                <div class="thought-bubble error">
+                    ❌ ${CAT_NAMES[guess]} n'est pas la bonne réponse... 
+                    <br>Pouvez-vous me montrer où ${emoji} doit aller ?
+                </div>
+
+                <div class="attempts">
+                    ${state.attempts.map(a => `
+                        <span class="attempt-badge wrong">${CAT_EMOJIS[a]} ${CAT_NAMES[a]} ✗</span>
+                    `).join('')}
+                </div>
+
+                <p class="correction-prompt">👆 Cliquez sur la BONNE catégorie ci-dessous !</p>
+            `;
+
+            // Rendre les catégories cliquables (sauf celles déjà essayées)
+            document.querySelectorAll('.category-box').forEach(box => {
+                const cat = box.dataset.cat;
+                if (!state.attempts.includes(cat)) {
+                    box.classList.add('clickable');
+                }
+            });
+
+            document.getElementById('explanation').className = 'explanation warning';
+            document.getElementById('explanation').innerHTML = `
+                <strong class="error-text">❌ Erreur n°${state.errors}</strong> — L'IA a proposé ${CAT_NAMES[guess]} mais c'est faux. 
+                <strong>Cliquez sur la bonne catégorie</strong> pour lui apprendre la réponse correcte !
+            `;
+        }
+    }
+}
+
+// ===============================
+// ENSEIGNER LA BONNE CATÉGORIE
+// ===============================
+function teachCategory(cat) {
+    if (state.mode !== 'correction') return;
+    if (state.attempts.includes(cat)) return; // Déjà essayé
+
+    learnSuccess(cat);
+}
+
+// ===============================
+// SUCCÈS : L'IA APPREND
+// ===============================
+function learnSuccess(cat) {
+    const { element, id, emoji } = state.current;
+
+    state.mode = 'idle';
+
+    // Enregistrer
+    state.learned[id] = cat;
+    state.categories[cat].push(emoji);
+
+    // Mettre à jour l'affichage
+    document.getElementById(`items-${cat}`).textContent = state.categories[cat].join(' ');
+    document.getElementById(`count-${cat}`).textContent = state.categories[cat].length;
+
+    // Marquer comme appris
+    element.classList.add('learned');
+    element.classList.remove('current');
+
+    // Interface IA
+    document.getElementById('ia-avatar').textContent = '🎉';
+    document.getElementById('ia-title').textContent = 'J\'ai appris !';
+    document.getElementById('ia-subtitle').textContent = `${emoji} = ${CAT_NAMES[cat]}`;
+
+    document.getElementById('ia-content').innerHTML = `
+        <div class="thought-bubble success">
+            ✅ C'est noté ! Je me souviendrai que ${emoji} est un/une <strong>${CAT_NAMES[cat]}</strong>.
+            <br>Merci professeur !
+        </div>
+
+        <div class="ia-guess">
+            <span class="guess-shape">${emoji}</span>
+            <span class="guess-arrow">→</span>
+            <span class="guess-category correct">${CAT_EMOJIS[cat]} ${CAT_NAMES[cat]} ✓</span>
+        </div>
+    `;
+
+    // Catégorie correcte
+    document.querySelectorAll('.category-box').forEach(c => c.classList.remove('highlight', 'clickable'));
+    document.querySelector(`[data-cat="${cat}"]`).classList.add('correct-answer');
+
+    // Stats
+    updateStats();
+
+    // Explication
+    const errorsForThis = state.attempts.length;
+    document.getElementById('explanation').className = 'explanation';
+    document.getElementById('explanation').innerHTML = `
+        <strong>✅ Apprentissage réussi !</strong> ${errorsForThis > 0 
+            ? `Après ${errorsForThis} erreur(s), l'IA a finalement appris que ${emoji} appartient à <strong>${CAT_NAMES[cat]}</strong>.`
+            : `L'IA a correctement classé ${emoji} dans <strong>${CAT_NAMES[cat]}</strong> du premier coup !`
+        }
+        Elle s'en souviendra pour la suite.
+    `;
+
+    // Reset après délai
+    setTimeout(() => {
+        document.querySelectorAll('.category-box').forEach(c => c.classList.remove('correct-answer'));
+        resetIAZone();
+        checkCompletion();
+    }, 2000);
+}
+
+// ===============================
+// FONCTIONS UTILITAIRES
+// ===============================
+function updateStats() {
+    const learned = Object.keys(state.learned).length;
+    const total = document.querySelectorAll('.shape').length;
+
+    document.getElementById('stat-learned').textContent = learned;
+    document.getElementById('stat-errors').textContent = state.errors;
+    document.getElementById('progress-fill').style.width = (learned / total * 100) + '%';
+}
+
+function resetIAZone() {
+    state.current = null;
+    state.attempts = [];
+    state.currentGuess = null;
+
+    document.getElementById('ia-avatar').textContent = '🤖';
+    document.getElementById('ia-title').textContent = 'IA en apprentissage';
+    document.getElementById('ia-subtitle').textContent = 'Cliquez sur un élément pour continuer';
+    document.getElementById('ia-content').innerHTML = '';
+}
+
+function checkCompletion() {
+    const learned = Object.keys(state.learned).length;
+    const total = document.querySelectorAll('.shape').length;
+
+    if (learned === total) {
+        document.getElementById('final-zone').innerHTML = `
+            <div class="final-message">
+                <h3>🎉 Entraînement terminé !</h3>
+                <p>
+                    L'IA a appris à classer les <strong>${total} éléments</strong>.<br>
+                    Total d'erreurs pendant l'apprentissage : <strong>${state.errors}</strong><br><br>
+                    <strong>💡 C'est exactement comme ça que fonctionne le vrai Machine Learning :</strong><br>
+                    Des humains étiquettent des milliers d'exemples, l'IA apprend les patterns, 
+                    puis elle peut généraliser à de nouvelles données jamais vues !
+                </p>
+            </div>
+        `;
+
+        document.getElementById('ia-content').innerHTML = `
+            <div class="thought-bubble success">
+                🧠 J'ai tout appris ! Je peux maintenant reconnaître les fruits, les animaux et les véhicules. 
+                Merci pour votre patience, professeur !
+            </div>
+        `;
+        document.getElementById('ia-avatar').textContent = '🎓';
+        document.getElementById('ia-title').textContent = 'IA Entraînée';
+        document.getElementById('ia-subtitle').textContent = 'Apprentissage complet !';
+    }
+}
+
+function resetAll() {
+    state.mode = 'idle';
+    state.current = null;
+    state.attempts = [];
+    state.currentGuess = null;
+    state.learned = {};
+    state.errors = 0;
+    state.categories = { fruits: [], animaux: [], vehicules: [] };
+
+    document.querySelectorAll('.shape').forEach(s => s.classList.remove('learned', 'current'));
+    document.querySelectorAll('.category-box').forEach(c => c.classList.remove('highlight', 'correct-answer', 'clickable'));
+
+    CATS.forEach(cat => {
+        document.getElementById(`items-${cat}`).textContent = '';
+        document.getElementById(`count-${cat}`).textContent = '0';
+    });
+
+    document.getElementById('final-zone').innerHTML = '';
+    resetIAZone();
+    updateStats();
+
+    document.getElementById('explanation').className = 'explanation';
+    document.getElementById('explanation').innerHTML = `
+        <strong>💡 Le principe :</strong> L'IA ne connaît rien au départ. Elle va <strong>deviner au hasard</strong>, 
+        et c'est vous qui lui apprenez en validant ou corrigeant ses réponses. C'est exactement comme ça que fonctionnent 
+        les vrais systèmes de Machine Learning !
+    `;
+}
+
+// Init
+updateStats();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>IA Lab : Apprentissage Actif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #1e293b;
+            --panel-light: #334155;
+            --accent: #06b6d4;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --supervised: #10b981;
+            --unsupervised: #f59e0b;
+            --reinforcement: #ec4899;
+            --success: #22c55e;
+            --error: #ef4444;
+            --xp: #a855f7;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: var(--panel);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--xp));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .xp-panel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .xp-bar {
+            width: 150px;
+            height: 10px;
+            background: var(--bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--xp), var(--accent));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .xp-text {
+            font-size: 0.85rem;
+            color: var(--xp);
+            font-weight: bold;
+        }
+
+        .level-badge {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--xp), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Onglets */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: var(--panel);
+            border: 2px solid var(--panel-light);
+            color: var(--text-muted);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg);
+        }
+
+        /* Introduction du mode */
+        .mode-intro {
+            background: linear-gradient(135deg, var(--panel) 0%, var(--panel-light) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .mode-intro h2 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mode-intro p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .mode-intro .example-box {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+        }
+
+        .mode-intro .example-box strong {
+            color: var(--accent);
+        }
+
+        /* Layout principal */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            min-height: 500px;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--panel);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* Zone de données */
+        .data-zone {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 450px;
+        }
+
+        .data-card {
+            background: var(--bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .data-card.processed {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--panel);
+            border-radius: 10px;
+        }
+
+        .card-info h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .card-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .card-scenario {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--panel);
+            padding: 10px;
+            border-radius: 8px;
+            line-height: 1.4;
+        }
+
+        /* Zone d'action centrale */
+        .action-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .brain {
+            width: 100px;
+            height: 100px;
+            background: var(--bg);
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .brain.working {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--accent);
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            to { box-shadow: 0 0 50px var(--accent); }
+        }
+
+        .status-text {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        /* Boutons de choix */
+        .choices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            max-width: 400px;
+        }
+
+        .choice-btn {
+            padding: 15px 25px;
+            background: var(--panel-light);
+            border: 2px solid var(--panel-light);
+            color: var(--text);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--bg);
+            transform: scale(1.05);
+        }
+
+        .choice-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .choice-btn.wrong {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        /* Zone de résultat */
+        .result-zone {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .result-zone.visible {
+            display: flex;
+        }
+
+        .result-card {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .result-header.success { color: var(--success); }
+        .result-header.error { color: var(--error); }
+
+        .result-explanation {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .concept-box {
+            background: var(--panel);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .concept-title {
+            color: var(--xp);
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .concept-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .btn-next {
+            padding: 12px 30px;
+            background: var(--accent);
+            border: none;
+            color: var(--bg);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.2s;
+        }
+
+        .btn-next:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        /* Métriques */
+        .metrics {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            padding: 15px;
+            background: var(--bg);
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--panel);
+            border-radius: 12px;
+            border-left: 4px solid var(--success);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Slider pour renforcement */
+        .slider-container {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px 0;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .slider-labels span:first-child { color: var(--error); }
+        .slider-labels span:last-child { color: var(--success); }
+
+        .slider {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, var(--error), var(--unsupervised), var(--success));
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .slider-value {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Groupes pour non supervisé */
+        .clusters-visual {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .cluster-box {
+            width: 100px;
+            height: 100px;
+            border: 3px dashed var(--panel-light);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg);
+        }
+
+        .cluster-box:hover {
+            border-color: var(--accent);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .cluster-box.selected {
+            border-color: var(--accent);
+            border-style: solid;
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        .cluster-box .cluster-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .cluster-box .cluster-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .cluster-box .cluster-count {
+            font-size: 0.7rem;
+            color: var(--accent);
+            margin-top: 3px;
+        }
+
+        /* Items dans clusters */
+        .cluster-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .cluster-item {
+            padding: 8px 12px;
+            background: var(--panel);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>🧪 IA Lab : Apprends le Machine Learning</h1>
+    <div class="xp-panel">
+        <div>
+            <div class="xp-bar"><div class="xp-fill" id="xp-fill"></div></div>
+            <div class="xp-text"><span id="xp-current">0</span> / <span id="xp-max">100</span> XP</div>
+        </div>
+        <div class="level-badge" id="level-badge">1</div>
+    </div>
+</div>
+
+<!-- Onglets -->
+<div class="tabs">
+    <button class="tab-btn active" data-mode="supervised" onclick="setMode('supervised')">🏷️ Supervisé</button>
+    <button class="tab-btn" data-mode="unsupervised" onclick="setMode('unsupervised')">🔮 Non Supervisé</button>
+    <button class="tab-btn" data-mode="reinforcement" onclick="setMode('reinforcement')">🎮 Par Renforcement</button>
+</div>
+
+<!-- Introduction du mode -->
+<div class="mode-intro" id="mode-intro"></div>
+
+<!-- Layout principal -->
+<div class="main-layout">
+    <!-- Colonne gauche : données OU action -->
+    <div class="panel" id="left-panel">
+        <div class="panel-title" id="left-title">Données à classifier</div>
+        <div class="data-zone" id="data-list"></div>
+    </div>
+
+    <!-- Colonne droite : action OU résultat -->
+    <div class="panel" id="right-panel">
+        <div class="action-zone" id="action-zone">
+            <div class="brain" id="brain">🧠</div>
+            <p class="status-text" id="status">Cliquez sur un élément à gauche pour commencer</p>
+            <div class="choices" id="choices"></div>
+        </div>
+        <div class="result-zone" id="result-zone"></div>
+        <div class="metrics" id="metrics">
+            <div class="metric">
+                <div class="metric-value" id="metric-correct">0</div>
+                <div class="metric-label">Correct</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="metric-total">0</div>
+                <div class="metric-label">Total</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="metric-accuracy">--%</div>
+                <div class="metric-label">Précision</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ===============================
+// DONNÉES SIMPLIFIÉES
+// ===============================
+
+const SCENARIOS = {
+    supervised: {
+        intro: {
+            title: "🏷️ Apprentissage Supervisé",
+            description: "L'IA apprend à partir d'exemples étiquetés par des humains. Comme un élève qui apprend avec un professeur qui lui dit \"ceci est un chat, ceci est un chien\".",
+            example: "📧 <strong>Exemple concret :</strong> Pour créer un filtre anti-spam, on montre à l'IA des milliers d'emails en lui disant \"spam\" ou \"pas spam\". Elle apprend les patterns (mots suspects, expéditeurs...) pour ensuite classer les nouveaux emails toute seule."
+        },
+        items: [
+            {
+                id: "email1",
+                icon: "📧",
+                name: "Email reçu",
+                context: "Objet: \"FÉLICITATIONS vous avez GAGNÉ!!!\"",
+                scenario: "Un email arrive avec beaucoup de majuscules et de points d'exclamation. L'expéditeur est inconnu.",
+                choices: ["📬 Normal", "🚫 Spam"],
+                correct: "🚫 Spam",
+                explanation: "Les majuscules excessives, les points d'exclamation multiples et les promesses de gains sont des signaux classiques de spam. L'IA apprend à reconnaître ces patterns.",
+                concept: "Détection de patterns",
+                conceptDetail: "L'IA analyse les mots, la ponctuation, l'expéditeur... Elle trouve des règles comme : 'Si MAJUSCULES > 50% ET mots (gagné, gratuit, urgent) ALORS spam'."
+            },
+            {
+                id: "email2",
+                icon: "📧",
+                name: "Email reçu",
+                context: "Objet: \"Re: Réunion de demain\"",
+                scenario: "Un email de votre collègue Marie qui confirme sa présence à la réunion de 14h.",
+                choices: ["📬 Normal", "🚫 Spam"],
+                correct: "📬 Normal",
+                explanation: "Expéditeur connu, sujet professionnel normal, pas de signaux d'alerte. L'IA apprend aussi ce qui est \"normal\".",
+                concept: "Apprentissage du \"normal\"",
+                conceptDetail: "L'IA doit voir autant d'exemples normaux que de spam pour bien différencier les deux. C'est l'équilibre des données."
+            },
+            {
+                id: "photo1",
+                icon: "🖼️",
+                name: "Photo uploadée",
+                context: "Photo de profil pour un site web",
+                scenario: "Une image montrant un visage humain souriant, bien éclairé, sur fond neutre.",
+                choices: ["👤 Visage", "🏞️ Paysage", "🚫 Inapproprié"],
+                correct: "👤 Visage",
+                explanation: "L'IA détecte les caractéristiques d'un visage : yeux, nez, bouche, proportions. Facebook utilise ça pour suggérer des tags sur vos photos.",
+                concept: "Reconnaissance faciale",
+                conceptDetail: "L'IA apprend à repérer des \"points clés\" sur un visage (68 points en général). Elle compare ensuite ces points pour reconnaître les personnes."
+            },
+            {
+                id: "photo2",
+                icon: "🖼️",
+                name: "Photo uploadée",
+                context: "Photo de profil pour un site web",
+                scenario: "Une image montrant une montagne enneigée avec un lac au premier plan.",
+                choices: ["👤 Visage", "🏞️ Paysage", "🚫 Inapproprié"],
+                correct: "🏞️ Paysage",
+                explanation: "Pas de visage détecté, mais des éléments naturels (montagne, eau, ciel). L'IA classe selon ce qu'elle \"voit\".",
+                concept: "Classification d'images",
+                conceptDetail: "L'IA analyse les couleurs, les formes, les textures. Bleu en haut = ciel, vert/marron = nature, lignes horizontales = paysage."
+            },
+            {
+                id: "avis1",
+                icon: "⭐",
+                name: "Avis client",
+                context: "Commentaire sur un restaurant",
+                scenario: "\"Super resto ! Les pizzas sont délicieuses et le service est top. Je recommande vivement !\"",
+                choices: ["😊 Positif", "😐 Neutre", "😠 Négatif"],
+                correct: "😊 Positif",
+                explanation: "Mots positifs (super, délicieuses, top, recommande) = sentiment positif. C'est l'analyse de sentiment utilisée par tous les sites d'avis.",
+                concept: "Analyse de sentiment",
+                conceptDetail: "L'IA a une \"liste\" de mots positifs et négatifs. Elle compte et pondère pour donner un score global."
+            },
+            {
+                id: "avis2",
+                icon: "⭐",
+                name: "Avis client",
+                context: "Commentaire sur un restaurant",
+                scenario: "\"Bof. C'était correct mais sans plus. Le prix est un peu élevé pour ce que c'est.\"",
+                choices: ["😊 Positif", "😐 Neutre", "😠 Négatif"],
+                correct: "😐 Neutre",
+                explanation: "Mélange de positif (correct) et négatif (bof, élevé, sans plus). Quand c'est mitigé, l'IA classe en neutre.",
+                concept: "Nuances du langage",
+                conceptDetail: "Le défi : comprendre l'ironie, le sarcasme, les nuances. \"Pas mal\" peut être positif ou négatif selon le contexte !"
+            },
+            {
+                id: "avis3",
+                icon: "⭐",
+                name: "Avis client",
+                context: "Commentaire sur un restaurant",
+                scenario: "\"Catastrophique. Attente interminable, plat froid, serveur désagréable. À fuir !\"",
+                choices: ["😊 Positif", "😐 Neutre", "😠 Négatif"],
+                correct: "😠 Négatif",
+                explanation: "Accumulation de mots négatifs + expressions fortes (catastrophique, à fuir). Le sentiment est clairement négatif.",
+                concept: "Intensité du sentiment",
+                conceptDetail: "L'IA apprend que \"catastrophique\" est plus fort que \"pas terrible\". Elle donne des poids différents aux mots."
+            },
+            {
+                id: "fruit1",
+                icon: "🍎",
+                name: "Image fruit",
+                context: "Tri automatique en supermarché",
+                scenario: "Fruit rouge, rond, avec une petite tige sur le dessus. Taille moyenne.",
+                choices: ["🍎 Pomme", "🍊 Orange", "🍋 Citron"],
+                correct: "🍎 Pomme",
+                explanation: "Rouge + rond + tige = pomme. C'est comme ça que les machines de tri automatique fonctionnent dans les entrepôts.",
+                concept: "Vision par ordinateur",
+                conceptDetail: "L'IA analyse : couleur (RGB), forme (rondeur), taille, texture de peau. Chaque fruit a une \"signature\" unique."
+            },
+            {
+                id: "fruit2",
+                icon: "🍊",
+                name: "Image fruit",
+                context: "Tri automatique en supermarché",
+                scenario: "Fruit orange, rond, peau granuleuse avec des petits points. Pas de tige visible.",
+                choices: ["🍎 Pomme", "🍊 Orange", "🍋 Citron"],
+                correct: "🍊 Orange",
+                explanation: "Orange + texture granuleuse + pas de tige = orange. La texture de la peau est un indice important !",
+                concept: "Importance des features",
+                conceptDetail: "Une \"feature\" = une caractéristique mesurable. Ici : couleur, texture, forme, taille. Plus on a de features, mieux l'IA distingue."
+            }
+        ]
+    },
+
+    unsupervised: {
+        intro: {
+            title: "🔮 Apprentissage Non Supervisé",
+            description: "L'IA trouve des groupes TOUTE SEULE, sans qu'on lui dise quoi chercher. Elle repère les similarités et crée des catégories automatiquement.",
+            example: "🎵 <strong>Exemple concret :</strong> Spotify analyse vos morceaux écoutés et trouve des patterns : \"Ces 50 chansons ont un tempo rapide et des guitares → je crée un groupe 'Rock Énergique'\". Personne n'a dit à l'IA que c'était du rock !"
+        },
+        items: [
+            {
+                id: "client1", icon: "🛒", name: "Client A",
+                data: "Achète : bio, légumes, yoga mat | Fréquence : 2x/semaine | Panier moyen : 45€",
+                features: { bio: true, sport: true, frequence: "haute", panier: "moyen" }
+            },
+            {
+                id: "client2", icon: "🛒", name: "Client B", 
+                data: "Achète : bio, fruits, livres cuisine | Fréquence : 2x/semaine | Panier moyen : 52€",
+                features: { bio: true, sport: false, frequence: "haute", panier: "moyen" }
+            },
+            {
+                id: "client3", icon: "🛒", name: "Client C",
+                data: "Achète : surgelés, sodas, chips | Fréquence : 1x/semaine | Panier moyen : 35€",
+                features: { bio: false, sport: false, frequence: "moyenne", panier: "bas" }
+            },
+            {
+                id: "client4", icon: "🛒", name: "Client D",
+                data: "Achète : pizza surgelée, bières, snacks | Fréquence : 1x/semaine | Panier moyen : 28€",
+                features: { bio: false, sport: false, frequence: "moyenne", panier: "bas" }
+            },
+            {
+                id: "client5", icon: "🛒", name: "Client E",
+                data: "Achète : champagne, foie gras, truffes | Fréquence : 1x/mois | Panier moyen : 180€",
+                features: { bio: false, sport: false, frequence: "basse", panier: "tres_haut" }
+            },
+            {
+                id: "client6", icon: "🛒", name: "Client F",
+                data: "Achète : caviar, grands crus, homard | Fréquence : 2x/mois | Panier moyen : 220€",
+                features: { bio: false, sport: false, frequence: "basse", panier: "tres_haut" }
+            },
+            {
+                id: "client7", icon: "🛒", name: "Client G",
+                data: "Achète : protéines, compléments, bio | Fréquence : 3x/semaine | Panier moyen : 65€",
+                features: { bio: true, sport: true, frequence: "haute", panier: "moyen" }
+            },
+            {
+                id: "client8", icon: "🛒", name: "Client H",
+                data: "Achète : couches, petits pots, lait | Fréquence : 2x/semaine | Panier moyen : 55€",
+                features: { bio: false, sport: false, frequence: "haute", panier: "moyen", bebe: true }
+            }
+        ],
+        clusters: [
+            { id: "cluster1", icon: "🥗", name: "Groupe 1", description: "?", items: [] },
+            { id: "cluster2", icon: "🍕", name: "Groupe 2", description: "?", items: [] },
+            { id: "cluster3", icon: "🥂", name: "Groupe 3", description: "?", items: [] },
+            { id: "cluster4", icon: "👶", name: "Groupe 4", description: "?", items: [] }
+        ],
+        solution: {
+            "cluster1": ["client1", "client2", "client7"],
+            "cluster2": ["client3", "client4"],
+            "cluster3": ["client5", "client6"],
+            "cluster4": ["client8"]
+        },
+        clusterNames: {
+            "cluster1": "🥗 Healthy & Bio",
+            "cluster2": "🍕 Pratique & Rapide", 
+            "cluster3": "🥂 Premium & Luxe",
+            "cluster4": "👶 Jeunes Parents"
+        }
+    },
+
+    reinforcement: {
+        intro: {
+            title: "🎮 Apprentissage par Renforcement",
+            description: "L'IA apprend par essai-erreur, comme un bébé qui apprend à marcher. Elle fait une action → reçoit une récompense ou une punition → ajuste son comportement.",
+            example: "🎮 <strong>Exemple concret :</strong> Une IA qui joue à un jeu vidéo. Elle essaie de sauter → tombe dans un trou → PUNITION (-10 points). Elle essaie de sauter au bon moment → attrape une pièce → RÉCOMPENSE (+10 points). Après des milliers d'essais, elle devient experte !"
+        },
+        items: [
+            {
+                id: "robot1",
+                icon: "🤖",
+                name: "Robot aspirateur",
+                scenario: "Le robot est dans le salon. Il détecte de la poussière devant lui.",
+                action: "Il avance et aspire la poussière.",
+                question: "Que devrait recevoir le robot ?",
+                correct: 80,
+                explanation: "Aspirer la poussière = mission accomplie = récompense ! Le robot apprend que \"poussière détectée → avancer → aspirer\" est un bon comportement.",
+                concept: "Récompense positive",
+                conceptDetail: "Quand l'action correspond à l'objectif (nettoyer), on donne une récompense. Le robot va répéter ce comportement."
+            },
+            {
+                id: "robot2",
+                icon: "🤖", 
+                name: "Robot aspirateur",
+                scenario: "Le robot détecte un escalier devant lui.",
+                action: "Il continue d'avancer et tombe dans l'escalier.",
+                question: "Que devrait recevoir le robot ?",
+                correct: -100,
+                explanation: "Tomber = dégât matériel = grosse punition ! Le robot apprend à détecter les escaliers et à les éviter à tout prix.",
+                concept: "Punition forte",
+                conceptDetail: "Certaines erreurs sont graves (se casser). On donne une punition très forte pour que le robot évite absolument ce comportement."
+            },
+            {
+                id: "robot3",
+                icon: "🤖",
+                name: "Robot aspirateur", 
+                scenario: "Le robot a fini de nettoyer mais sa batterie est à 5%.",
+                action: "Il retourne à sa base pour se recharger.",
+                question: "Que devrait recevoir le robot ?",
+                correct: 60,
+                explanation: "Anticiper le besoin de recharge = comportement intelligent = récompense. Sinon il tomberait en panne au milieu du salon !",
+                concept: "Planification",
+                conceptDetail: "Le robot apprend à penser à l'avenir : \"Si batterie faible → retourner à la base AVANT de tomber en panne\"."
+            },
+            {
+                id: "thermo1",
+                icon: "🌡️",
+                name: "Thermostat intelligent",
+                scenario: "Il est 8h, tout le monde part au travail. La maison sera vide jusqu'à 18h.",
+                action: "Le thermostat baisse le chauffage de 21°C à 17°C.",
+                question: "Que devrait recevoir le thermostat ?",
+                correct: 70,
+                explanation: "Économiser de l'énergie quand personne n'est là = comportement optimal ! C'est comme ça que Nest apprend vos habitudes.",
+                concept: "Apprentissage des habitudes",
+                conceptDetail: "Le thermostat observe : \"Tous les jours à 8h, les humains partent\". Il apprend à anticiper et économiser."
+            },
+            {
+                id: "thermo2",
+                icon: "🌡️",
+                name: "Thermostat intelligent",
+                scenario: "La famille rentre à 18h. Il fait 17°C dans la maison.",
+                action: "Le thermostat n'a pas préchauffé. Les habitants ont froid.",
+                question: "Que devrait recevoir le thermostat ?",
+                correct: -50,
+                explanation: "Les habitants ont froid = mauvaise expérience = punition. Le thermostat doit apprendre à préchauffer AVANT le retour.",
+                concept: "Anticipation",
+                conceptDetail: "L'IA doit comprendre que \"confort au retour\" nécessite une action 30 min AVANT. C'est la notion de récompense différée."
+            },
+            {
+                id: "jeu1",
+                icon: "🎮",
+                name: "IA dans un jeu",
+                scenario: "Le personnage IA est face à un ennemi. Il a le choix entre attaquer ou fuir.",
+                action: "L'IA attaque et gagne le combat. Elle récupère 100 pièces d'or.",
+                question: "Que devrait recevoir l'IA ?",
+                correct: 90,
+                explanation: "Victoire + récompense en jeu = double récompense pour l'IA ! Elle apprend que attaquer cet ennemi est profitable.",
+                concept: "Récompense du jeu",
+                conceptDetail: "Dans les jeux, la récompense est souvent le score. L'IA maximise le score en trouvant les meilleures stratégies."
+            },
+            {
+                id: "jeu2",
+                icon: "🎮",
+                name: "IA dans un jeu",
+                scenario: "Le personnage IA saute par-dessus un trou mais tombe dedans.",
+                action: "L'IA perd une vie. Game Over.",
+                question: "Que devrait recevoir l'IA ?",
+                correct: -80,
+                explanation: "Perdre une vie = punition forte. L'IA va ajuster son timing de saut pour la prochaine fois.",
+                concept: "Apprentissage moteur",
+                conceptDetail: "L'IA apprend le bon timing par essai-erreur. Après 1000 essais, elle saute parfaitement !"
+            },
+            {
+                id: "reco1",
+                icon: "🎬",
+                name: "Netflix - Recommandation",
+                scenario: "L'IA recommande un film d'horreur à un utilisateur.",
+                action: "L'utilisateur regarde 5 minutes puis arrête et met un pouce en bas.",
+                question: "Que devrait recevoir l'IA ?",
+                correct: -40,
+                explanation: "L'utilisateur n'a pas aimé = mauvaise recommandation = punition. L'IA doit mieux comprendre ses goûts.",
+                concept: "Feedback utilisateur",
+                conceptDetail: "Chaque interaction (regarder, arrêter, noter) est un signal. L'IA ajuste ses recommandations en fonction."
+            },
+            {
+                id: "reco2",
+                icon: "🎬",
+                name: "Netflix - Recommandation",
+                scenario: "L'IA recommande une comédie à un utilisateur.",
+                action: "L'utilisateur regarde le film en entier et met un pouce en haut.",
+                question: "Que devrait recevoir l'IA ?",
+                correct: 80,
+                explanation: "Film regardé entièrement + pouce en haut = recommandation réussie = récompense ! L'IA a bien cerné les goûts.",
+                concept: "Succès de recommandation",
+                conceptDetail: "L'objectif : maximiser le temps de visionnage et la satisfaction. Chaque bon choix renforce le modèle."
+            }
+        ]
+    }
+};
+
+// ===============================
+// ÉTAT DE L'APPLICATION
+// ===============================
+
+let state = {
+    mode: 'supervised',
+    xp: 0,
+    level: 1,
+    correct: 0,
+    total: 0,
+    currentItem: null,
+    processedIds: new Set(),
+    // Pour non supervisé
+    clusterAssignments: {},
+    // Pour renforcement  
+    sliderValue: 0
+};
+
+// ===============================
+// FONCTIONS UTILITAIRES
+// ===============================
+
+function addXP(amount) {
+    state.xp += amount;
+    const xpForLevel = state.level * 100;
+    
+    if (state.xp >= xpForLevel) {
+        state.xp -= xpForLevel;
+        state.level++;
+        showToast(`🎉 Niveau ${state.level} atteint !`);
+    }
+    
+    updateXPDisplay();
+}
+
+function updateXPDisplay() {
+    const xpForLevel = state.level * 100;
+    const percentage = (state.xp / xpForLevel) * 100;
+    
+    document.getElementById('xp-fill').style.width = `${percentage}%`;
+    document.getElementById('xp-current').textContent = state.xp;
+    document.getElementById('xp-max').textContent = xpForLevel;
+    document.getElementById('level-badge').textContent = state.level;
+}
+
+function showToast(message) {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<span>✨</span><span>${message}</span>`;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function updateMetrics() {
+    document.getElementById('metric-correct').textContent = state.correct;
+    document.getElementById('metric-total').textContent = state.total;
+    const accuracy = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 0;
+    document.getElementById('metric-accuracy').textContent = `${accuracy}%`;
+}
+
+// ===============================
+// CHANGEMENT DE MODE
+// ===============================
+
+function setMode(newMode) {
+    state.mode = newMode;
+    state.currentItem = null;
+    state.processedIds = new Set();
+    state.clusterAssignments = {};
+    
+    // Reset clusters pour non supervisé
+    if (newMode === 'unsupervised') {
+        SCENARIOS.unsupervised.clusters.forEach(c => c.items = []);
+    }
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === newMode);
+    });
+    
+    const colors = { supervised: '#10b981', unsupervised: '#f59e0b', reinforcement: '#ec4899' };
+    document.documentElement.style.setProperty('--accent', colors[newMode]);
+    
+    render();
+}
+
+// ===============================
+// RENDU PRINCIPAL
+// ===============================
+
+function render() {
+    const scenario = SCENARIOS[state.mode];
+    
+    // Introduction
+    document.getElementById('mode-intro').innerHTML = `
+        <h2>${scenario.intro.title}</h2>
+        <p>${scenario.intro.description}</p>
+        <div class="example-box">${scenario.intro.example}</div>
+    `;
+    
+    // Contenu selon le mode
+    if (state.mode === 'supervised') {
+        renderSupervised();
+    } else if (state.mode === 'unsupervised') {
+        renderUnsupervised();
+    } else {
+        renderReinforcement();
+    }
+    
+    updateMetrics();
+}
+
+// ===============================
+// MODE SUPERVISÉ
+// ===============================
+
+function renderSupervised() {
+    document.getElementById('left-title').textContent = 'Données à classifier';
+    
+    const list = document.getElementById('data-list');
+    list.innerHTML = SCENARIOS.supervised.items.map(item => `
+        <div class="data-card ${state.processedIds.has(item.id) ? 'processed' : ''}" 
+             onclick="selectSupervisedItem('${item.id}')">
+            <div class="card-header">
+                <div class="card-icon">${item.icon}</div>
+                <div class="card-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.context}</p>
+                </div>
+            </div>
+            <div class="card-scenario">${item.scenario}</div>
+        </div>
+    `).join('');
+    
+    // Reset zone droite
+    document.getElementById('action-zone').style.display = 'flex';
+    document.getElementById('result-zone').classList.remove('visible');
+    document.getElementById('brain').textContent = '🧠';
+    document.getElementById('status').textContent = 'Cliquez sur un élément à gauche';
+    document.getElementById('choices').innerHTML = '';
+}
+
+function selectSupervisedItem(id) {
+    if (state.processedIds.has(id)) return;
+    
+    const item = SCENARIOS.supervised.items.find(i => i.id === id);
+    state.currentItem = item;
+    
+    document.getElementById('status').textContent = item.scenario;
+    document.getElementById('choices').innerHTML = item.choices.map(choice => `
+        <button class="choice-btn" onclick="answerSupervised('${choice}')">${choice}</button>
+    `).join('');
+    
+    document.getElementById('result-zone').classList.remove('visible');
+    document.getElementById('action-zone').style.display = 'flex';
+}
+
+async function answerSupervised(choice) {
+    if (!state.currentItem) return;
+    
+    const item = state.currentItem;
+    const isCorrect = choice === item.correct;
+    
+    // Animation
+    const brain = document.getElementById('brain');
+    brain.classList.add('working');
+    brain.textContent = '⚡';
+    
+    await new Promise(r => setTimeout(r, 600));
+    
+    brain.classList.remove('working');
+    brain.textContent = isCorrect ? '✅' : '❌';
+    
+    // Mise à jour état
+    state.total++;
+    if (isCorrect) {
+        state.correct++;
+        addXP(15);
+        showToast('+15 XP !');
+    }
+    state.processedIds.add(item.id);
+    
+    // Colorer le bouton
+    document.querySelectorAll('.choice-btn').forEach(btn => {
+        if (btn.textContent === item.correct) btn.classList.add('correct');
+        else if (btn.textContent === choice && !isCorrect) btn.classList.add('wrong');
+        btn.disabled = true;
+    });
+    
+    // Afficher résultat
+    setTimeout(() => {
+        document.getElementById('action-zone').style.display = 'none';
+        document.getElementById('result-zone').innerHTML = `
+            <div class="result-card">
+                <div class="result-header ${isCorrect ? 'success' : 'error'}">
+                    ${isCorrect ? '✅ Correct !' : '❌ Incorrect'}
+                    ${!isCorrect ? `<span style="color: var(--text-muted); font-weight: normal; font-size: 0.9rem;"> — La réponse était : ${item.correct}</span>` : ''}
+                </div>
+                <p class="result-explanation">${item.explanation}</p>
+                <div class="concept-box">
+                    <div class="concept-title">💡 ${item.concept}</div>
+                    <p class="concept-text">${item.conceptDetail}</p>
+                </div>
+            </div>
+            <button class="btn-next" onclick="nextSupervised()">Continuer →</button>
+        `;
+        document.getElementById('result-zone').classList.add('visible');
+    }, 800);
+    
+    // Griser la carte
+    document.querySelector(`[onclick="selectSupervisedItem('${item.id}')"]`)?.classList.add('processed');
+    
+    updateMetrics();
+}
+
+function nextSupervised() {
+    state.currentItem = null;
+    document.getElementById('action-zone').style.display = 'flex';
+    document.getElementById('result-zone').classList.remove('visible');
+    document.getElementById('brain').textContent = '🧠';
+    document.getElementById('status').textContent = 'Cliquez sur un élément à gauche';
+    document.getElementById('choices').innerHTML = '';
+}
+
+// ===============================
+// MODE NON SUPERVISÉ
+// ===============================
+
+function renderUnsupervised() {
+    document.getElementById('left-title').textContent = 'Clients à regrouper';
+    
+    const list = document.getElementById('data-list');
+    list.innerHTML = SCENARIOS.unsupervised.items.map(item => `
+        <div class="data-card ${state.clusterAssignments[item.id] ? 'processed' : ''}" 
+             onclick="selectUnsupervisedItem('${item.id}')">
+            <div class="card-header">
+                <div class="card-icon">${item.icon}</div>
+                <div class="card-info">
+                    <h4>${item.name}</h4>
+                </div>
+            </div>
+            <div class="card-scenario">${item.data}</div>
+        </div>
+    `).join('');
+    
+    // Zone droite : clusters
+    document.getElementById('action-zone').style.display = 'flex';
+    document.getElementById('result-zone').classList.remove('visible');
+    document.getElementById('brain').textContent = '🔮';
+    document.getElementById('status').innerHTML = `
+        <strong>Comment ça marche :</strong><br>
+        1. Cliquez sur un client à gauche<br>
+        2. Placez-le dans le groupe qui vous semble logique<br>
+        3. L'IA fait pareil, mais automatiquement sur des millions de clients !
+    `;
+    
+    renderClusters();
+}
+
+function renderClusters() {
+    const clusters = SCENARIOS.unsupervised.clusters;
+    
+    document.getElementById('choices').innerHTML = `
+        <div class="clusters-visual">
+            ${clusters.map(c => `
+                <div class="cluster-box ${state.currentItem ? '' : 'disabled'}" onclick="assignToCluster('${c.id}')">
+                    <span class="cluster-icon">${c.icon}</span>
+                    <span class="cluster-label">${c.name}</span>
+                    <span class="cluster-count">${c.items.length} client(s)</span>
+                </div>
+            `).join('')}
+        </div>
+        <div class="cluster-items" id="cluster-preview"></div>
+    `;
+}
+
+function selectUnsupervisedItem(id) {
+    if (state.clusterAssignments[id]) return;
+    
+    const item = SCENARIOS.unsupervised.items.find(i => i.id === id);
+    state.currentItem = item;
+    
+    document.getElementById('status').innerHTML = `
+        <strong>Client sélectionné :</strong> ${item.name}<br>
+        ${item.data}<br><br>
+        👉 Dans quel groupe le placeriez-vous ?
+    `;
+    
+    renderClusters();
+}
+
+function assignToCluster(clusterId) {
+    if (!state.currentItem) {
+        showToast('Sélectionnez d\'abord un client !');
+        return;
+    }
+    
+    const item = state.currentItem;
+    const cluster = SCENARIOS.unsupervised.clusters.find(c => c.id === clusterId);
+    
+    // Ajouter au cluster
+    cluster.items.push(item);
+    state.clusterAssignments[item.id] = clusterId;
+    state.total++;
+    
+    // Vérifier si correct
+    const solution = SCENARIOS.unsupervised.solution;
+    const isCorrect = solution[clusterId]?.includes(item.id);
+    
+    if (isCorrect) {
+        state.correct++;
+        addXP(10);
+        showToast('+10 XP !');
+    }
+    
+    // Griser la carte
+    document.querySelector(`[onclick="selectUnsupervisedItem('${item.id}')"]`)?.classList.add('processed');
+    
+    state.currentItem = null;
+    
+    // Vérifier si tous placés
+    const allPlaced = SCENARIOS.unsupervised.items.every(i => state.clusterAssignments[i.id]);
+    
+    if (allPlaced) {
+        showUnsupervisedResults();
+    } else {
+        document.getElementById('status').innerHTML = `
+            <strong>✅ ${item.name} ajouté au ${cluster.name}</strong><br><br>
+            Continuez avec les autres clients !
+        `;
+        renderClusters();
+    }
+    
+    updateMetrics();
+}
+
+function showUnsupervisedResults() {
+    const names = SCENARIOS.unsupervised.clusterNames;
+    const clusters = SCENARIOS.unsupervised.clusters;
+    
+    document.getElementById('action-zone').style.display = 'none';
+    document.getElementById('result-zone').innerHTML = `
+        <div class="result-card">
+            <div class="result-header success">🎉 Tous les clients sont regroupés !</div>
+            <p class="result-explanation">
+                Voici comment l'IA aurait nommé vos groupes en analysant les points communs :
+            </p>
+            ${clusters.map(c => `
+                <div style="background: var(--panel); padding: 10px; border-radius: 8px; margin: 10px 0;">
+                    <strong>${names[c.id]}</strong><br>
+                    <small style="color: var(--text-muted);">
+                        ${c.items.map(i => i.name).join(', ') || 'Vide'}
+                    </small>
+                </div>
+            `).join('')}
+            <div class="concept-box">
+                <div class="concept-title">💡 C'est le Clustering !</div>
+                <p class="concept-text">
+                    L'IA analyse les caractéristiques (achats, fréquence, montant) et regroupe automatiquement les clients similaires. 
+                    Les supermarchés utilisent ça pour envoyer des promos ciblées : les "Bio" reçoivent des offres bio, les "Premium" des invitations VIP !
+                </p>
+            </div>
+        </div>
+        <button class="btn-next" onclick="setMode('unsupervised')">Recommencer →</button>
+    `;
+    document.getElementById('result-zone').classList.add('visible');
+}
+
+// ===============================
+// MODE RENFORCEMENT
+// ===============================
+
+function renderReinforcement() {
+    document.getElementById('left-title').textContent = 'Situations à évaluer';
+    
+    const list = document.getElementById('data-list');
+    list.innerHTML = SCENARIOS.reinforcement.items.map(item => `
+        <div class="data-card ${state.processedIds.has(item.id) ? 'processed' : ''}" 
+             onclick="selectReinforcementItem('${item.id}')">
+            <div class="card-header">
+                <div class="card-icon">${item.icon}</div>
+                <div class="card-info">
+                    <h4>${item.name}</h4>
+                </div>
+            </div>
+            <div class="card-scenario">${item.scenario}</div>
+        </div>
+    `).join('');
+    
+    document.getElementById('action-zone').style.display = 'flex';
+    document.getElementById('result-zone').classList.remove('visible');
+    document.getElementById('brain').textContent = '🎮';
+    document.getElementById('status').innerHTML = `
+        <strong>Comment ça marche :</strong><br>
+        1. Cliquez sur une situation à gauche<br>
+        2. Décidez : récompense 🏆 ou punition 💥 ?<br>
+        3. Utilisez le curseur pour doser l'intensité !
+    `;
+    document.getElementById('choices').innerHTML = '';
+}
+
+function selectReinforcementItem(id) {
+    if (state.processedIds.has(id)) return;
+    
+    const item = SCENARIOS.reinforcement.items.find(i => i.id === id);
+    state.currentItem = item;
+    state.sliderValue = 0;
+    
+    document.getElementById('status').innerHTML = `
+        <strong>${item.scenario}</strong><br><br>
+        <em>Action : ${item.action}</em><br><br>
+        ${item.question}
+    `;
+    
+    document.getElementById('choices').innerHTML = `
+        <div class="slider-container">
+            <div class="slider-labels">
+                <span>💥 Punition</span>
+                <span>🏆 Récompense</span>
+            </div>
+            <input type="range" class="slider" min="-100" max="100" value="0" 
+                   oninput="updateSlider(this.value)">
+            <div class="slider-value" id="slider-display">0</div>
+        </div>
+        <button class="btn-next" onclick="submitReinforcement()">Valider mon choix</button>
+    `;
+}
+
+function updateSlider(value) {
+    state.sliderValue = parseInt(value);
+    const display = document.getElementById('slider-display');
+    
+    if (value > 50) {
+        display.innerHTML = `🏆 +${value}`;
+        display.style.color = 'var(--success)';
+    } else if (value < -50) {
+        display.innerHTML = `💥 ${value}`;
+        display.style.color = 'var(--error)';
+    } else {
+        display.innerHTML = `${value > 0 ? '+' : ''}${value}`;
+        display.style.color = 'var(--unsupervised)';
+    }
+}
+
+async function submitReinforcement() {
+    if (!state.currentItem) return;
+    
+    const item = state.currentItem;
+    const userValue = state.sliderValue;
+    const correctValue = item.correct;
+    
+    // Calculer la différence
+    const diff = Math.abs(userValue - correctValue);
+    const isClose = diff <= 30;
+    
+    // Animation
+    const brain = document.getElementById('brain');
+    brain.classList.add('working');
+    brain.textContent = '⚡';
+    
+    await new Promise(r => setTimeout(r, 600));
+    
+    brain.classList.remove('working');
+    brain.textContent = isClose ? '✅' : '🤔';
+    
+    // Mise à jour état
+    state.total++;
+    if (isClose) {
+        state.correct++;
+        addXP(15);
+        showToast('+15 XP !');
+    }
+    state.processedIds.add(item.id);
+    
+    // Griser la carte
+    document.querySelector(`[onclick="selectReinforcementItem('${item.id}')"]`)?.classList.add('processed');
+    
+    // Afficher résultat
+    setTimeout(() => {
+        document.getElementById('action-zone').style.display = 'none';
+        document.getElementById('result-zone').innerHTML = `
+            <div class="result-card">
+                <div class="result-header ${isClose ? 'success' : 'error'}">
+                    ${isClose ? '✅ Bien joué !' : '🤔 Pas tout à fait...'}
+                </div>
+                <p style="margin-bottom: 15px;">
+                    <strong>Votre choix :</strong> ${userValue > 0 ? '+' : ''}${userValue}<br>
+                    <strong>Choix optimal :</strong> ${correctValue > 0 ? '+' : ''}${correctValue}
+                </p>
+                <p class="result-explanation">${item.explanation}</p>
+                <div class="concept-box">
+                    <div class="concept-title">💡 ${item.concept}</div>
+                    <p class="concept-text">${item.conceptDetail}</p>
+                </div>
+            </div>
+            <button class="btn-next" onclick="nextReinforcement()">Continuer →</button>
+        `;
+        document.getElementById('result-zone').classList.add('visible');
+    }, 800);
+    
+    updateMetrics();
+}
+
+function nextReinforcement() {
+    state.currentItem = null;
+    document.getElementById('action-zone').style.display = 'flex';
+    document.getElementById('result-zone').classList.remove('visible');
+    renderReinforcement();
+}
+
+// ===============================
+// INITIALISATION
+// ===============================
+
+window.onload = () => {
+    updateXPDisplay();
+    setMode('supervised');
+};
+</script>
+<div class="footer">
+    Créé par <strong>Rodulfo DOMINGUEZ</strong> — Formation IA & Machine Learning
+</div>
+
+</body>
+</html>
