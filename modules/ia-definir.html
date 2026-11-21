@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 1 : Qu'est-ce que l'IA ?</title>
+  <link rel="stylesheet" href="/src/css/main.css">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+</head>
+<body class="page-stage page-lecon" data-steps>
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">MODULE 1 • SÉANCE 1</p>
+          <h1 class="page-title">Qu'est-ce que l'IA ?</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <section id="lecon">
+      <div class="panel">
+        <p class="panel-text greeting" data-needs-user hidden><i class="ph-duotone ph-hand-waving" aria-hidden="true"></i> Bienvenue dans le module 1, <strong data-user="prenom"></strong>.</p>
+        <figure class="lesson-hero lesson-hero--behind lesson-hero--natural" style="--o: 0.22; --x: 48.3%; --y: 24.5%">
+          <img src="/assets/images/modules/ia-definir.webp" alt="" width="1680" height="720" decoding="async"
+               onload="this.closest('figure').classList.add('is-loaded')"
+               onerror="this.closest('figure').hidden = true">
+        </figure>
+        <h2 class="panel-title">Une question de métier</h2>
+        <figure class="lesson-hero" style="--w: 80%">
+          <img src="/assets/images/modules/ia-definir-mwauu1ap.webp" alt="" width="1680" height="720" decoding="async"
+               onload="this.closest('figure').classList.add('is-loaded')"
+               onerror="this.closest('figure').hidden = true">
+        </figure>
+        <p class="panel-text" data-measure="narrow" data-align="center">Camille dirige la logistique d'une PME. En une semaine, trois fournisseurs lui proposent un logiciel « avec de l'IA » : un outil de prévision des stocks, un lecteur de bons de livraison manuscrits et un assistant de réponse aux clients. Les trois brochures se ressemblent. Les trois logiciels, non.</p>
+        <p class="panel-text" data-align="center">
+          Cette séance vous donne une grille simple pour savoir, face à n'importe quel outil, s'il s'agit d'un vrai système d'IA ou d'un logiciel classique bien emballé.
+        </p>
+        <div class="objectives">
+          <h3>À la fin de cette séance, vous saurez</h3>
+          <ul class="checklist">
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> décrire un système par son entrée, son traitement et sa sortie</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> distinguer des règles écrites à la main de règles apprises sur des exemples</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> appliquer trois questions pour repérer un système d'IA</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> éviter le piège « automatique = intelligent »</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Une grille en trois cases</h2>
+        <p class="panel-text">Tout logiciel, de la calculatrice à l'assistant vocal, se décrit de la même façon : <strong>une entrée</strong> arrive, <strong>un traitement</strong> la transforme, <strong>une sortie</strong> en résulte.</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <caption>Les trois outils de Camille</caption>
+            <thead><tr><th scope="col">Outil</th><th scope="col">Entrée</th><th scope="col">Sortie</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Prévision de stock</th><td>Ventes des douze derniers mois</td><td>Quantité à commander</td></tr>
+              <tr><th scope="row">Lecteur de bons manuscrits</th><td>Photo d'un bon de livraison</td><td>Texte et numéros extraits</td></tr>
+              <tr><th scope="row">Assistant clients</th><td>Question rédigée par un client</td><td>Réponse rédigée</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="panel-text">Les entrées et les sorties ne disent rien de l'intelligence du système. Tout se joue dans la troisième case : <strong>comment le traitement a-t-il été construit ?</strong></p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Écrit à la main, ou appris ?</h2>
+        <div class="example-grid">
+          <article class="example-card">
+            <span class="example-icon"><i class="ph-duotone ph-list-checks" aria-hidden="true"></i></span>
+            <h3>Règles écrites</h3>
+            <p>Une personne a rédigé la procédure, ligne après ligne : « si le stock passe sous 20, commander 100 ». Le logiciel fait exactement ce qu'on lui a écrit, ni plus, ni moins.</p>
+            <p class="example-impact"><strong>Atout :</strong> on sait toujours pourquoi il a décidé ainsi. <strong>Limite :</strong> il ne gère pas ce que son auteur n'avait pas prévu.</p>
+          </article>
+          <article class="example-card">
+            <span class="example-icon"><i class="ph-duotone ph-chart-line-up" aria-hidden="true"></i></span>
+            <h3>Règles apprises</h3>
+            <p>Personne n'a écrit la procédure. On a montré à un programme des milliers d'exemples (des écritures et leur transcription) et il en a déduit lui-même comment faire.</p>
+            <p class="example-impact"><strong>Atout :</strong> il traite des cas que personne n'avait décrits. <strong>Limite :</strong> il peut se tromper, et ses raisons sont parfois difficiles à expliquer.</p>
+          </article>
+        </div>
+        <p class="panel-text">On parlera de <strong>système d'IA</strong> lorsque la façon de produire la sortie est, pour l'essentiel, <strong>apprise à partir de données</strong> plutôt qu'écrite d'avance. C'est une définition de travail : elle suffit pour décider, sans prétendre trancher tous les débats.</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Trois questions à poser à un fournisseur</h2>
+        <ol class="steps-list">
+          <li><strong>Qui a écrit la règle de décision ?</strong> Si la réponse est « un développeur, dans le code », c'est un logiciel classique.</li>
+          <li><strong>Que se passe-t-il si on lui montre d'autres exemples ?</strong> Un système d'IA change son comportement quand on le réentraîne sur de nouvelles données ; un logiciel classique ne change pas.</li>
+          <li><strong>Et face à un cas imprévu ?</strong> Un système appris généralise (il propose une réponse plausible, parfois fausse) ; un logiciel à règles se bloque ou renvoie une erreur.</li>
+        </ol>
+        <aside class="note-card">
+          <h3>Verdict pour Camille</h3>
+          <p>La prévision de stock applique une formule fixée par l'éditeur : classique. Le lecteur de bons a été entraîné sur des écritures : IA. L'assistant clients dépend de son fonctionnement : s'il suit un arbre de questions prédéfini, classique ; s'il génère ses réponses à partir de textes appris, IA.</p>
+        </aside>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Le piège : confondre automatique et intelligent</h2>
+        <p class="panel-text">
+          Une macro de tableur qui trie mille lignes en une seconde est <em>automatique</em> : elle répète à l'identique ce qu'on lui a écrit. Elle n'a rien appris et ne comprendra jamais une ligne différente.
+          La vitesse, le volume ou l'écran moderne ne prouvent rien : seule compte la manière dont le traitement a été construit.
+        </p>
+        <aside class="note-card">
+          <h3>Parler juste</h3>
+          <ul>
+            <li>« L'IA » désigne une <strong>discipline</strong>, comme « la chimie » : mieux vaut dire « un système qui utilise de l'IA ».</li>
+            <li>Un même produit peut combiner règles écrites et parties apprises : posez la question pour <strong>chaque fonction</strong>, pas pour le produit entier.</li>
+            <li>Les mots « apprendre » ou « comprendre » décrivent un réglage de paramètres, pas une compréhension humaine.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="activite">
+      <div class="panel sort-activity" data-sort>
+        <h2 class="panel-title">À vous de jouer : règle écrite ou règle apprise ?</h2>
+        <p class="panel-text">Pour chaque outil, dites comment son traitement a probablement été construit.</p>
+
+        <ul class="sort-list">
+          <li class="sort-item" data-item data-answer="ecrite" data-explain="Une minuterie suit un cycle fixé par l'installateur. Rien n'est appris : c'est une règle écrite.">
+            <p>Un feu tricolore à cycle fixe : 40 secondes de vert, 5 d'orange, 45 de rouge.</p>
+            <div class="sort-actions"><button type="button" class="btn btn-outline" data-choice="ecrite">Règle écrite</button><button type="button" class="btn btn-outline" data-choice="apprise">Règle apprise</button></div>
+            <p class="feedback" role="status"></p>
+          </li>
+          <li class="sort-item" data-item data-answer="apprise" data-explain="Personne ne peut décrire toutes les écritures possibles : le lecteur a été entraîné sur des milliers d'exemples.">
+            <p>Un lecteur qui transcrit des bons de livraison écrits à la main.</p>
+            <div class="sort-actions"><button type="button" class="btn btn-outline" data-choice="ecrite">Règle écrite</button><button type="button" class="btn btn-outline" data-choice="apprise">Règle apprise</button></div>
+            <p class="feedback" role="status"></p>
+          </li>
+          <li class="sort-item" data-item data-answer="ecrite" data-explain="La formule est la même quelles que soient les données : rien ne s'adapte.">
+            <p>Une cellule de tableur qui calcule la TVA : montant × 20 %.</p>
+            <div class="sort-actions"><button type="button" class="btn btn-outline" data-choice="ecrite">Règle écrite</button><button type="button" class="btn btn-outline" data-choice="apprise">Règle apprise</button></div>
+            <p class="feedback" role="status"></p>
+          </li>
+          <li class="sort-item" data-item data-answer="apprise" data-explain="Il n'y a pas de liste de règles : le modèle a repéré lui-même, dans des messages déjà triés, ce qui distingue un courrier indésirable.">
+            <p>Une messagerie qui range les courriers indésirables d'après ceux que les utilisateurs ont déjà signalés.</p>
+            <div class="sort-actions"><button type="button" class="btn btn-outline" data-choice="ecrite">Règle écrite</button><button type="button" class="btn btn-outline" data-choice="apprise">Règle apprise</button></div>
+            <p class="feedback" role="status"></p>
+          </li>
+          <li class="sort-item" data-item data-answer="apprise" data-explain="Les suggestions viennent de textes réellement écrits par des utilisateurs, dont le modèle a déduit les enchaînements de mots probables.">
+            <p>Un clavier de téléphone qui propose le mot suivant d'après vos habitudes d'écriture.</p>
+            <div class="sort-actions"><button type="button" class="btn btn-outline" data-choice="ecrite">Règle écrite</button><button type="button" class="btn btn-outline" data-choice="apprise">Règle apprise</button></div>
+            <p class="feedback" role="status"></p>
+          </li>
+        </ul>
+
+        <p class="sort-score" role="status" data-score></p>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="panel panel-accent" data-assessment="m1-s1"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <a class="btn btn-primary btn-lg" href="ia-domaines.html">Séance suivante : les grandes familles <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i></a>
+    </div>
+  </main>
+
+  <script type="module" src="/src/js/intro.js"></script>
+  <script type="module" src="/src/js/quiz.js"></script>
+  <script type="module" src="/src/js/profile.js"></script>
+  <script type="module" src="/src/js/page-header.js"></script>
+  <script type="module" src="/src/js/steps.js"></script>
+</body>
+</html>

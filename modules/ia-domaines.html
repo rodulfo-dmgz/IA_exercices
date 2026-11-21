@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 1 : Les grandes familles de l'IA</title>
+  <link rel="stylesheet" href="/src/css/main.css">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+</head>
+<body class="page-stage page-lecon" data-steps>
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">MODULE 1 • SÉANCE 2</p>
+          <h1 class="page-title">Les grandes familles de l'IA</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <section id="lecon">
+      <div class="panel">
+        <h2 class="panel-title">Un projet, quatre métiers</h2>
+        <p class="panel-text">
+          Une usine souhaite prévoir quand sa presse hydraulique va tomber en panne, pour la réparer avant l'arrêt de production.
+          Autour de la table : un automaticien, une analyste de données, un spécialiste de l'apprentissage automatique et un responsable de maintenance.
+          Tous disent « IA », mais chacun parle d'autre chose. Cette séance met de l'ordre dans ces mots.
+        </p>
+        <div class="objectives">
+          <h3>À la fin de cette séance, vous saurez</h3>
+          <ul class="checklist">
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> situer l'apprentissage automatique et l'apprentissage profond par rapport à l'IA ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> dire ce que couvre la science des données et la robotique ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> savoir à quel métier poser quelle question dans un projet.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Qui fait quoi dans le projet de la presse</h2>
+        <div class="data-table-wrap">
+          <table class="data-table table-text">
+            <caption>Les quatre familles, vues à travers un même projet</caption>
+            <thead><tr><th scope="col">Famille</th><th scope="col">Question qu'elle traite</th><th scope="col">Dans la presse hydraulique</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Robotique</th><td>Comment une machine perçoit-elle et agit-elle dans le monde physique ?</td><td>Poser des capteurs de vibration et de température, commander l'arrêt de la presse.</td></tr>
+              <tr><th scope="row">Science des données</th><td>Que racontent les données, et à quelle question métier répondent-elles ?</td><td>Nettoyer deux ans de relevés, repérer que les pannes suivent les pics de chaleur.</td></tr>
+              <tr><th scope="row">Apprentissage automatique</th><td>Comment obtenir un programme qui apprend une règle à partir d'exemples ?</td><td>Entraîner un modèle sur les relevés précédant chaque panne passée.</td></tr>
+              <tr><th scope="row">Apprentissage profond</th><td>Peut-on confier l'apprentissage à un très grand réseau de neurones ?</td><td>Utile si l'on ajoute des images ou des sons bruts (écouter la presse), plus que pour quelques chiffres.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Comment elles s'emboîtent</h2>
+        <p class="panel-text">L'IA est le grand ensemble. L'apprentissage automatique en est une branche, et l'apprentissage profond une sous-famille de celle-ci. La science des données et la robotique, elles, recoupent ces domaines sans s'y réduire.</p>
+        <div class="nesting" role="img" aria-label="Schéma emboîté : l'apprentissage profond est inclus dans l'apprentissage automatique, lui-même inclus dans l'IA, elle-même incluse dans l'informatique.">
+          <div class="nest nest-1"><span>Informatique</span>
+            <div class="nest nest-2"><span>Intelligence artificielle</span>
+              <div class="nest nest-3"><span>Apprentissage automatique</span>
+                <div class="nest nest-4"><span>Apprentissage profond</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <aside class="note-card">
+          <h3>Pourquoi « profond » ?</h3>
+          <p>Le mot compte les <strong>couches</strong> de calcul empilées dans le réseau de neurones, pas une profondeur de réflexion. C'est cette famille qui est derrière la reconnaissance vocale, la traduction automatique et la génération d'images ou de textes.</p>
+        </aside>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Ce qu'est (et n'est pas) un robot</h2>
+        <p class="panel-text">
+          Un robot est une machine dotée de <strong>capteurs</strong> (pour percevoir) et d'<strong>actionneurs</strong> (pour agir : moteur, bras, vérin), pilotée par un programme.
+          Il n'a pas besoin de forme humaine : un bras de soudure d'usine en est un.
+        </p>
+        <p class="panel-text">
+          Un « robot conversationnel » n'est donc pas un robot : sans corps, ni capteurs, ni actionneurs, c'est un logiciel. La robotique emprunte volontiers à l'IA (voir, planifier, anticiper) mais beaucoup de robots n'en contiennent aucune.
+        </p>
+      </div>
+    </section>
+
+    <section id="activite">
+      <div class="panel sort-activity" data-sort>
+        <h2 class="panel-title">À vous de jouer : quelle famille ?</h2>
+        <p class="panel-text">Associez chaque tâche de l'usine à la famille qui la décrit le mieux.</p>
+
+        <ul class="sort-list">
+          <li class="sort-item" data-item data-answer="robot" data-explain="Il s'agit de matériel physique : un capteur qui mesure, un actionneur qui coupe. C'est de la robotique.">
+            <p>Installer un capteur de vibrations et un relais qui coupe l'alimentation de la presse.</p>
+            <div class="sort-actions">
+              <button type="button" class="btn btn-outline" data-choice="auto">Apprentissage automatique</button>
+              <button type="button" class="btn btn-outline" data-choice="profond">Apprentissage profond</button>
+              <button type="button" class="btn btn-outline" data-choice="donnees">Science des données</button>
+              <button type="button" class="btn btn-outline" data-choice="robot">Robotique</button>
+            </div>
+            <p class="feedback" role="status"></p>
+          </li>
+          <li class="sort-item" data-item data-answer="donnees" data-explain="On explore des relevés pour comprendre un phénomène et répondre à une question métier : science des données.">
+            <p>Étudier deux ans de relevés pour comprendre à quelles conditions la presse tombe en panne.</p>
+            <div class="sort-actions">
+              <button type="button" class="btn btn-outline" data-choice="auto">Apprentissage automatique</button>
+              <button type="button" class="btn btn-outline" data-choice="profond">Apprentissage profond</button>
+              <button type="button" class="btn btn-outline" data-choice="donnees">Science des données</button>
+              <button type="button" class="btn btn-outline" data-choice="robot">Robotique</button>
+            </div>
+            <p class="feedback" role="status"></p>
+          </li>
+          <li class="sort-item" data-item data-answer="auto" data-explain="Un programme déduit une règle d'après des exemples passés (relevés et pannes) : apprentissage automatique.">
+            <p>Entraîner un programme à prédire une panne à partir des relevés qui ont précédé les pannes passées.</p>
+            <div class="sort-actions">
+              <button type="button" class="btn btn-outline" data-choice="auto">Apprentissage automatique</button>
+              <button type="button" class="btn btn-outline" data-choice="profond">Apprentissage profond</button>
+              <button type="button" class="btn btn-outline" data-choice="donnees">Science des données</button>
+              <button type="button" class="btn btn-outline" data-choice="robot">Robotique</button>
+            </div>
+            <p class="feedback" role="status"></p>
+          </li>
+          <li class="sort-item" data-item data-answer="profond" data-explain="Un réseau de neurones à très nombreuses couches, appliqué à un signal brut (le son) : apprentissage profond.">
+            <p>Faire « écouter » l'enregistrement sonore brut de la presse par un très grand réseau de neurones pour détecter un bruit anormal.</p>
+            <div class="sort-actions">
+              <button type="button" class="btn btn-outline" data-choice="auto">Apprentissage automatique</button>
+              <button type="button" class="btn btn-outline" data-choice="profond">Apprentissage profond</button>
+              <button type="button" class="btn btn-outline" data-choice="donnees">Science des données</button>
+              <button type="button" class="btn btn-outline" data-choice="robot">Robotique</button>
+            </div>
+            <p class="feedback" role="status"></p>
+          </li>
+        </ul>
+
+        <p class="sort-score" role="status" data-score></p>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="panel panel-accent" data-assessment="m1-s2"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <a class="btn btn-outline btn-lg" href="ia-definir.html"><i class="ph-duotone ph-arrow-circle-left" aria-hidden="true"></i> Séance précédente</a>
+      <a class="btn btn-primary btn-lg" href="ia-philosophie.html">Séance suivante : intelligent, vraiment ? <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i></a>
+    </div>
+  </main>
+
+  <script type="module" src="/src/js/intro.js"></script>
+  <script type="module" src="/src/js/quiz.js"></script>
+  <script type="module" src="/src/js/profile.js"></script>
+  <script type="module" src="/src/js/page-header.js"></script>
+  <script type="module" src="/src/js/steps.js"></script>
+</body>
+</html>

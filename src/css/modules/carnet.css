@@ -1,0 +1,104 @@
+/* Pages « ressources » : bilan des notes, glossaire, liens utiles */
+.page-carnet .content { max-width: 900px; }
+
+/* ── Bilan ── */
+.bilan-global { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; margin: 0 0 20px; padding: 20px 24px; border: 2px solid var(--border-color); border-radius: var(--radius-md); background: var(--surface-subtle); }
+.bilan-global.is-ok { border-color: var(--success); }
+.bilan-global.is-ko { border-color: var(--brand-primary); }
+.bilan-figure { display: grid; justify-items: center; min-width: 120px; }
+.bilan-figure strong { font-family: var(--font-display); font-size: 48px; line-height: 1; color: var(--brand-ink); }
+.bilan-figure span { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+.bilan-facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; color: var(--brand-ink); }
+.bilan-facts li { display: flex; gap: 10px; align-items: center; }
+.bilan-facts i { font-size: 22px; color: var(--brand-primary); }
+.bilan-actions { margin: 0 0 28px; }
+
+.bilan-table-wrap { margin: 0 0 28px; overflow-x: auto; }
+.bilan-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.bilan-table caption { text-align: left; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--brand-ink); padding: 0 0 10px; }
+.bilan-table th, .bilan-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+.bilan-table thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); white-space: nowrap; }
+.bilan-table tbody th { font-weight: 600; }
+.bilan-table a { color: var(--brand-primary); text-underline-offset: 3px; }
+
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; border: 1px solid var(--border-color); }
+.badge i { font-size: 16px; }
+.badge--ok { color: var(--success); border-color: var(--success); }
+.badge--ko { color: var(--brand-primary); border-color: var(--brand-primary); }
+.badge--none { color: var(--text-muted); }
+
+/* ── Glossaire ── */
+.gloss-tools { display: grid; gap: 12px; margin: 8px 0 12px; }
+.gloss-search { position: relative; display: block; }
+.gloss-search i { position: absolute; left: 14px; top: 50%; translate: 0 -50%; font-size: 22px; color: var(--text-muted); pointer-events: none; }
+.gloss-search input { width: 100%; min-height: 48px; padding: 8px 14px 8px 46px; font: inherit; color: var(--rd-text); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-control); }
+.gloss-search input:focus-visible { outline: 3px solid var(--brand-primary); outline-offset: 1px; border-color: var(--brand-primary); }
+.gloss-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { min-height: 36px; padding: 0 14px; font: inherit; font-size: 14px; font-weight: 600; color: var(--brand-ink); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 999px; cursor: pointer; transition: background-color .15s, border-color .15s; }
+.chip:hover { border-color: var(--brand-primary); }
+.chip[aria-pressed="true"] { background: var(--brand-primary); border-color: var(--brand-primary); color: var(--on-primary); }
+.chip:focus-visible { outline: 3px solid var(--brand-primary); outline-offset: 2px; }
+.gloss-count { margin: 0 0 8px; font-size: 13px; color: var(--text-muted); }
+.gloss-letter { margin: 24px 0 6px; padding-bottom: 6px; border-bottom: 2px solid var(--brand-primary); font-family: var(--font-display); font-size: 22px; color: var(--brand-primary); }
+.gloss-group dl { margin: 0; }
+.gloss-item { padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+.gloss-item dt { font-weight: 700; color: var(--brand-ink); }
+.gloss-item dd { margin: 4px 0 0; color: var(--text-muted); line-height: 1.55; }
+.gloss-ref { margin-left: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; color: var(--brand-primary); text-underline-offset: 3px; }
+
+/* ── Liens utiles ── */
+.res-group { margin: 28px 0 8px; font-family: var(--font-display); color: var(--brand-ink); }
+.res-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.res-list li { padding: 12px 16px; border: 1px solid var(--border-color); border-radius: var(--radius-control); background: var(--bg-panel); }
+.res-list a { font-weight: 700; color: var(--brand-primary); text-underline-offset: 3px; }
+.res-list a::after { content: " ↗"; }
+.res-list p { margin: 4px 0 0; font-size: 14px; color: var(--text-muted); }
+
+@media print {
+  .page-bilan .page-header, .page-bilan .no-print, .page-bilan .bilan-table a::after { display: none !important; }
+  .page-bilan .print-only { display: block; margin-bottom: 14pt; }
+  .page-bilan .print-only h1 { font-size: 20pt; margin: 0; }
+  .page-bilan .panel { border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+  .page-bilan .bilan-table { font-size: 11pt; }
+  .page-bilan .bilan-table a { color: #000; text-decoration: none; }
+  .page-bilan .bilan-global { background: none; border: 1px solid #000; }
+  .page-bilan .badge { border: 0; padding: 0; }
+  .page-bilan table { break-inside: avoid; }
+}
+
+/* ── Félicitations et attestation ── */
+.bilan-congrats { display: flex; gap: 14px; align-items: center; margin: 0 0 20px; padding: 16px 20px; border: 2px solid var(--brand-primary); border-radius: var(--radius-md); background: var(--brand-primary-soft); color: var(--brand-ink); }
+.bilan-congrats.is-ok { border-color: var(--success); }
+.bilan-congrats i { font-size: 40px; flex: none; color: var(--brand-primary); }
+.bilan-congrats.is-ok i { color: var(--success); }
+.bilan-congrats h3 { margin: 0 0 2px; font-family: var(--font-display); font-size: 20px; }
+.bilan-congrats p { margin: 0; }
+
+.attestation { margin: 0 0 24px; padding: 28px 32px; text-align: center; border: 3px double var(--brand-primary); border-radius: var(--radius-lg); background: var(--bg-panel); color: var(--brand-ink); }
+.attestation[hidden] { display: none; }
+.att-kicker { margin: 0 0 6px; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-primary); font-weight: 700; }
+.attestation h2 { margin: 0 0 10px; font-family: var(--font-display); font-size: 30px; }
+.attestation p { margin: 0 0 12px; }
+.attestation ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; font-size: 14px; color: var(--text-muted); }
+@media print { .page-bilan .attestation { break-inside: avoid; border-color: #000; margin-bottom: 18pt; } }
+
+/* ── Mentions légales ── */
+.legal h2.panel-title { margin-top: 28px; }
+.legal h2.panel-title:first-of-type { margin-top: 0; }
+.legal-back { margin: 0 0 8px; }
+.legal-list { margin: 0 0 8px; display: grid; gap: 0; }
+.legal-list > div { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+.legal-list dt { font-weight: 700; color: var(--brand-ink); }
+.legal-list dd { margin: 0; color: var(--rd-text); overflow-wrap: anywhere; }
+@media (max-width: 560px) { .legal-list > div { grid-template-columns: 1fr; gap: 2px; } }
+.legal-rights { margin: 12px 0; padding: 16px 20px; border-left: 4px solid var(--brand-primary); background: var(--brand-primary-soft); border-radius: 0 var(--radius-control) var(--radius-control) 0; }
+.legal-rights h3 { margin: 12px 0 4px; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; color: var(--brand-primary); }
+.legal-rights h3:first-child { margin-top: 0; }
+.legal-rights p, .legal-rights ul { margin: 0 0 6px; line-height: 1.55; }
+.legal-rights ul { padding-left: 20px; }
+.legal-cite { margin: 8px 0 0; padding: 12px 14px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-control); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.legal-points { margin: 0; padding-left: 20px; display: grid; gap: 8px; line-height: 1.55; }
+.todo { display: inline-block; padding: 2px 8px; border: 1px dashed var(--brand-accent); border-radius: 6px; background: var(--brand-accent-soft); color: var(--rd-text); font-size: 14px; }
+.page-legal a { color: var(--brand-primary); text-underline-offset: 3px; }
+.legal-foot { margin: 24px 0 0; font-size: 13px; color: var(--text-muted); }
+.legal-foot a { color: var(--brand-primary); text-underline-offset: 3px; }

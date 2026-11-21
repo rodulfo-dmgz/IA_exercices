@@ -1,0 +1,80 @@
+/* Séances en deux modes : diaporama / lecture (src/js/steps.js) */
+
+/* Le suivi vit DANS l'en-tête collant : titre, trait orange et étapes forment un seul bloc fixe,
+   donc rien ne vient se glisser dessous et on sait toujours où on en est. */
+.page-header .stepper { margin: 0; padding: 0; }
+.page-header:has(.stepper) { padding-bottom: 16px; }
+.page-header:has(.stepper) .divider { margin-bottom: calc(24px - 10px * var(--p)); }
+.stepper-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.stepper-label { margin: 0; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+/* Suivi des étapes : un segment par bloc (cliquable), puis un sommaire déroulant */
+.stepper-segments { display: flex; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.stepper-segments li { flex: 1 1 0; min-width: 0; }
+.stepper-seg {
+  display: block; width: 100%; height: 10px; padding: 0; border: 0; border-radius: 99px;
+  background: var(--border-color); cursor: pointer;
+  transition: background-color var(--duration) var(--ease), transform var(--duration) var(--ease);
+}
+.stepper-seg[data-state="done"] { background: var(--brand-secondary); }
+.stepper-seg[data-state="current"] { background: var(--brand-primary); transform: scaleY(1.4); }
+.stepper-seg:hover { transform: scaleY(1.4); }
+.stepper-seg:focus-visible { outline-offset: 3px; }
+
+.stepper-toc { position: relative; margin-top: 6px; }
+.stepper-toc summary {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 0;
+  font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; list-style: none;
+}
+.stepper-toc summary::-webkit-details-marker { display: none; }
+.stepper-toc summary i { font-size: 18px; line-height: 1; }
+.stepper-toc summary:hover { color: var(--brand-primary); }
+.stepper-toc-list { position: absolute; z-index: 30; top: 100%; left: 0; width: min(420px, calc(100vw - 48px)); max-height: 55vh; overflow: auto; box-shadow: 0 12px 32px rgb(18 53 91 / 18%); display: grid; gap: 2px; margin: 4px 0 0; padding: 8px; list-style: none; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+.stepper-toc-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px;
+  border: 0; border-radius: 8px; background: none; text-align: left;
+  font: inherit; font-size: 14px; color: var(--rd-text); cursor: pointer;
+}
+.stepper-toc-item i { flex: none; font-size: 20px; line-height: 1; color: var(--text-muted); }
+.stepper-toc-item:hover { background: var(--bg-hover); }
+.stepper-toc-item[data-state="done"] i { color: var(--brand-secondary); }
+.stepper-toc-item[data-state="current"] { font-weight: 600; background: var(--brand-primary-soft); color: var(--brand-primary); }
+.stepper-toc-item[data-state="current"] i { color: var(--brand-primary); }
+
+/* Choix du mode (boutons radio) */
+.mode-switch { display: inline-flex; padding: 3px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-subtle); }
+.mode-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 12px; border: 0; border-radius: 8px;
+  background: transparent; color: var(--text-muted);
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+.mode-btn i { font-size: 18px; line-height: 1; }
+.mode-btn:hover { color: var(--rd-text); }
+.mode-btn.is-on { color: var(--brand-primary); background: var(--bg-panel); box-shadow: 0 1px 3px rgb(18 53 91 / 14%); }
+
+/* Diaporama : une carte à la fois, qui entre en douceur ; cartes aérées */
+.mode-diaporama .panel:not([hidden]) { animation: step-in 320ms var(--ease-out) both; }
+@keyframes step-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.mode-diaporama .panel { padding: 36px; }
+.mode-diaporama .panel-title { font-size: 26px; margin-bottom: 20px; }
+.mode-diaporama .panel-text { font-size: 16px; line-height: 1.65; }
+
+.stepper-actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; }
+.stepper-actions [hidden] { display: none; }
+.stepper-actions [data-next] { margin-left: auto; }
+
+@media (max-width: 640px) {
+  .mode-diaporama .panel { padding: 24px 20px; }
+  .mode-diaporama .panel-title { font-size: 22px; }
+  .mode-btn { padding: 0 10px; }
+}
+
+/* Avant que steps.js ne s'exécute : on évite de voir toute la séance une fraction de seconde */
+body[data-steps]:not(.steps-ready) main .panel { visibility: hidden; }
+
+.stepper-help { display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-subtle); color: var(--text-muted); cursor: pointer; }
+.stepper-help i { font-size: 20px; line-height: 1; }
+.stepper-help:hover { color: var(--brand-primary); border-color: var(--brand-primary); }
+.stepper-help:focus-visible { outline: 3px solid var(--brand-primary); outline-offset: 2px; }
+.stepper-tools { display: flex; align-items: center; gap: 8px; }

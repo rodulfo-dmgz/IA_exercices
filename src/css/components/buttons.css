@@ -1,0 +1,18 @@
+/* Boutons */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 22px; border: 2px solid transparent; border-radius: var(--radius-control);
+  font-family: var(--font-sans); font-size: 15px; font-weight: 600; line-height: 1.3;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+.btn-primary { background: var(--brand-primary); color: var(--on-primary); }
+.btn-primary:hover { background: color-mix(in srgb, var(--brand-primary) 85%, black); }
+.btn-outline { background: var(--bg-panel); color: var(--brand-primary); border-color: var(--brand-primary); }
+.btn-outline:hover { background: var(--brand-primary-soft); }
+.btn-lg { padding: 14px 26px; font-size: 16px; }
+.btn-cta { background: var(--cta); color: #fff; box-shadow: 0 1px 2px color-mix(in srgb, var(--cta) 25%, transparent); }
+.btn-cta:hover { background: var(--cta-hover); box-shadow: 0 4px 6px color-mix(in srgb, var(--cta) 25%, transparent); transform: translateY(-1px); }
+.btn-cta:active { background: var(--cta-active); transform: none; }

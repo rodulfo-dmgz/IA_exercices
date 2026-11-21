@@ -1,0 +1,53 @@
+/* MEXA : hologramme guide (voir src/components/mexa/mexa.js) */
+
+.mexa {
+  --mexa-height: 480px;
+  position: relative;
+  isolation: isolate;   /* ses z-index internes (bouton lecture) restent sous l'en-tête collant de la page */
+  width: 100%;
+  height: var(--mexa-height);
+  margin: 0 auto;
+  overflow: hidden;
+  user-select: none;
+  background: transparent;
+}
+
+.mexa-canvas {
+  position: absolute; inset: 0; z-index: 2;
+  width: 100%; height: 100%;
+  cursor: grab; touch-action: none;
+}
+.mexa-canvas:active { cursor: grabbing; }
+
+.mexa-data {
+  position: absolute; z-index: 8;
+  opacity: 0; transition: opacity 1s ease; pointer-events: none;
+  font: 11px/1.55 var(--font-mono); letter-spacing: .04em;
+  color: #c2410c;
+}
+.mexa.is-ready .mexa-data { opacity: 1; }
+.mexa-data--tl { top: 16px; left: 16px; padding-left: 10px; border-left: 2px solid var(--brand-accent); }
+.mexa-data--br { bottom: 16px; right: 16px; padding-right: 10px; text-align: right; border-right: 2px solid var(--brand-accent); }
+.mexa-data .dim { color: #16766c; }
+:root.dark .mexa-data { color: #fdba74; }
+:root.dark .mexa-data .dim { color: #5eead4; }
+
+.mexa-btn-wrapper { position: absolute; bottom: 14px; left: 50%; z-index: 20; transform: translateX(-50%); }
+.mexa-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 50%;
+  color: var(--brand-primary);
+  background: color-mix(in srgb, var(--brand-primary) 15%, transparent);
+  border: 2px solid var(--brand-primary);
+  box-shadow: var(--shadow-glow);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: background .25s, box-shadow .25s, transform .2s;
+}
+.mexa-btn:hover { background: color-mix(in srgb, var(--brand-primary) 30%, transparent); transform: scale(1.08); }
+.mexa-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+@media (max-width: 640px) {
+  .mexa { --mexa-height: 380px; }
+  .mexa-data { font-size: 10px; }
+}

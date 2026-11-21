@@ -1,0 +1,113 @@
+/* Design tokens — palette RD Planify (voir ERP/css/base/variables.css) */
+
+@layer tokens {
+:root {
+  /* Layout */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 64px;
+  --sidebar-row-height: 46px;
+  --sidebar-cell: 64px;
+  --gutter: 20px;
+
+  /* Surfaces */
+  --bg-app: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --bg-hover: #f5f8fe;
+  --bg-active: #e6effd;
+  --bg-panel: #ffffff;
+  
+  /* Bordures */
+  --border-color: rgba(18, 53, 91, 0.12);
+  --border-subtle: rgba(18, 53, 91, 0.08);
+  
+  /* Textes */
+  --rd-text: #12355b;
+  --text-muted: rgba(18, 53, 91, 0.68); /* 4,5:1 minimum sur blanc et f8fafc */
+  --brand-ink: #12355b;
+
+  /* Palette RD Planify : Bleu profond / Émeraude / Orange vif */
+  --brand-primary: #1f4590;
+  --brand-primary-soft: #e6effd;
+  --brand-secondary: #1ca098;
+  --brand-accent: #ff570a;
+  --brand-accent-soft: #ffece2;
+  --on-primary: #ffffff;
+  --brand-deep: #152d5c;            /* bleu profond (dégradés) */
+  --brand-secondary-deep: #16766c;  /* émeraude foncé (dégradés) */
+  --brand-accent-light: #ffaa82;
+  --cta: #cc3e00;                   /* orange CTA : texte blanc 4,9:1 */
+  --cta-hover: #a33100;
+  --cta-active: #7a2400;
+
+  /* Retours (contraste >= 4,5:1 sur blanc) */
+  --success: #15803d;
+  --danger: #b91c1c;
+  --surface-subtle: #f3f4f6;
+  --border-strong: #858d9b; /* contour des champs : 3:1 sur blanc */
+  --radius-md: 12px;
+  --shadow-sm: 0 1px 2px rgb(18 53 91 / 6%);
+  
+  /* Divers */
+  --radius-sidebar: 16px;
+  --radius-control: 8px;
+  --radius-lg: 20px;
+
+  --shadow-sidebar: 0 4px 12px rgb(18 53 91 / 4%);
+  --shadow-card: 0 1px 2px rgb(18 53 91 / 4%), 0 8px 24px rgb(18 53 91 / 4%);
+  --shadow-glow: 0 0 24px rgba(31, 69, 144, 0.15);
+
+  /* Typographie */
+  --font-sans: "Switzer", -apple-system, sans-serif;
+  --font-display: "CabinetGrotesk", var(--font-sans);
+  --font-mono: "SpaceMono", ui-monospace, monospace;
+
+  --duration: 200ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==========================================================================
+   14. Thèmes (sombre, contraste élevé) — classes posées sur <html> par ui.js
+   ========================================================================== */
+/* Palette sombre issue de ERP/css/base/variables.css (html.dark) */
+:root.dark {
+  color-scheme: dark;
+  --bg-app: #0f172a; --bg-sidebar: #060f21; --bg-panel: #060f21;
+  --bg-hover: #0d1f42; --bg-active: #152d5c;
+  --border-color: rgba(255, 255, 255, 0.12); --border-subtle: rgba(255, 255, 255, 0.06); --border-strong: rgba(255, 255, 255, 0.42);
+  --rd-text: #e2e8f0; --text-muted: rgba(226, 232, 240, 0.64); --brand-ink: #f1f5f9;
+  --brand-primary: #8db3f0; --brand-primary-soft: #0d1f42; --on-primary: #060f21;
+  --brand-secondary: #2bc4b8;
+  --brand-accent: #ff8349; --brand-accent-soft: #3d1000;
+  --success: #4ade80; --danger: #fca5a5; --surface-subtle: #1e293b;
+  --shadow-sidebar: 0 4px 12px rgb(0 0 0 / 40%);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 50%);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 40%);
+}
+:root.high-contrast {
+  --border-color: #475569; --border-strong: #0f172a;
+  --rd-text: #020617; --text-muted: #1e293b; --brand-ink: #020617;
+  --brand-primary: #152d5c; --bg-active: #bdd5f9; --bg-hover: #e6effd;
+  --success: #14532d; --danger: #991b1b;
+}
+:root.dark.high-contrast {
+  --border-color: #94a3b8; --border-strong: #e2e8f0;
+  --rd-text: #fff; --text-muted: #e2e8f0; --brand-ink: #fff;
+  --brand-primary: #bdd5f9; --bg-active: #1a3670; --bg-hover: #152d5c;
+  --success: #86efac; --danger: #fecaca;
+}
+
+/* Impression / PDF : palette claire, même si l'écran est en thème sombre ou en contraste élevé */
+@media print {
+  :root, :root.dark, :root.high-contrast, :root.dark.high-contrast {
+    color-scheme: light;
+    --bg-app: #ffffff; --bg-sidebar: #ffffff; --bg-panel: #ffffff; --bg-hover: #ffffff; --bg-active: #ffffff;
+    --border-color: #9aa3b2; --border-subtle: #d5d9e0; --border-strong: #6b7280;
+    --rd-text: #000000; --text-muted: #374151; --brand-ink: #000000;
+    --brand-primary: #1f4590; --brand-primary-soft: #eef3fb; --on-primary: #ffffff;
+    --brand-accent: #cc3e00; --brand-accent-soft: #ffffff;
+    --success: #15803d; --danger: #b91c1c; --surface-subtle: #f3f4f6;
+    --shadow-sm: none; --shadow-card: none; --shadow-sidebar: none; --shadow-glow: none;
+  }
+}
+}

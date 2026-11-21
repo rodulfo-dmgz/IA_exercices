@@ -1,0 +1,94 @@
+/* Ateliers interactifs (src/js/activites/*) */
+[data-jarres], [data-nim], [data-cotes], [data-bayes], [data-tickets] { margin: 8px 0 4px; padding: 20px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--surface-subtle); }
+
+.act-readout { margin: 14px 0; padding: 12px 14px; border-radius: var(--radius-control); background: var(--bg-panel); border: 1px solid var(--border-color); line-height: 1.55; color: var(--rd-text); }
+.act-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.act-buttons .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+.act-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.act-meta { margin: 0; font-size: 13px; color: var(--text-muted); }
+.act-details { margin-top: 12px; }
+.act-details summary { cursor: pointer; font-weight: 600; color: var(--brand-primary); }
+.act-details summary:focus-visible { outline: 3px solid var(--brand-primary); outline-offset: 3px; border-radius: 4px; }
+.act-history { margin: 8px 0 0; padding-left: 22px; font-size: 14px; color: var(--text-muted); }
+.act-check { display: flex; gap: 10px; align-items: center; margin-top: 8px; font-weight: 600; cursor: pointer; }
+.act-check input { accent-color: var(--brand-primary); width: 18px; height: 18px; }
+.act-values { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; }
+
+/* Jerricans */
+.jugs { display: flex; gap: 28px; align-items: flex-end; justify-content: center; margin-bottom: 8px; }
+.jug { display: grid; justify-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--brand-ink); }
+.jug-body { position: relative; width: 96px; height: 160px; border: 3px solid var(--brand-primary); border-top-width: 2px; border-radius: 4px 4px 14px 14px; background: var(--bg-panel); overflow: hidden; }
+.jug:nth-child(2) .jug-body { height: calc(160px * var(--cap, 1)); }
+.jug-fill { position: absolute; inset: auto 0 0 0; height: 0; background: var(--brand-secondary); transition: height .35s ease; }
+@media (prefers-reduced-motion: reduce) { .jug-fill { transition: none; } }
+
+/* Allumettes */
+.nim-setup { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 12px; }
+.nim-setup select { margin-left: 8px; min-height: 40px; padding: 0 10px; font: inherit; color: var(--rd-text); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-control); }
+.matches { display: flex; flex-wrap: wrap; gap: 10px; min-height: 76px; padding: 12px 8px; align-items: flex-end; }
+.match { position: relative; width: 8px; height: 64px; border-radius: 3px; background: linear-gradient(var(--brand-accent) 0 14px, #c8a56a 14px); box-shadow: inset 0 -2px 0 rgb(0 0 0 / 12%); }
+
+/* Cotes ↔ probabilité */
+.act-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.act-card { margin: 0; padding: 16px; min-width: 0; border: 1px solid var(--border-color); border-radius: var(--radius-control); background: var(--bg-panel); }
+.act-card legend { padding: 0 6px; font-weight: 700; color: var(--brand-ink); }
+.act-inline { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; }
+.act-inline label, .tk-label { display: grid; gap: 4px; font-size: 14px; font-weight: 600; color: var(--brand-ink); }
+.act-inline input { width: 110px; min-height: 44px; padding: 6px 10px; font: inherit; color: var(--rd-text); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-control); }
+.act-inline input:focus-visible { outline: 3px solid var(--brand-primary); outline-offset: 1px; border-color: var(--brand-primary); }
+.prob-bar { height: 12px; border-radius: 999px; background: var(--surface-subtle); border: 1px solid var(--border-color); overflow: hidden; }
+.prob-bar span { display: block; height: 100%; width: 0; background: var(--brand-primary); transition: width .25s ease; }
+
+/* Bayes */
+.act-sliders { display: grid; gap: 16px; }
+.act-sliders label { display: grid; gap: 6px; font-weight: 600; color: var(--brand-ink); }
+.act-sliders output { color: var(--brand-primary); font-variant-numeric: tabular-nums; margin-left: 6px; }
+.act-sliders input[type="range"] { width: 100%; accent-color: var(--brand-primary); min-height: 28px; }
+.bayes-bar { display: flex; height: 22px; margin: 18px 0 4px; border-radius: 999px; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-panel); }
+.bayes-true { background: var(--brand-accent); min-width: 2px; }
+.bayes-false { background: var(--brand-primary); opacity: .35; }
+.bayes-list { list-style: none; padding: 14px 16px; display: grid; gap: 8px; }
+.bayes-result { padding-top: 8px; border-top: 1px dashed var(--border-color); font-size: 1.1em; }
+
+/* Tickets */
+.tk-label .quiz-input { max-width: 100%; }
+.tk-steps { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; }
+.tk-steps li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-control); font-variant-numeric: tabular-nums; }
+.tk-verdict.is-urgent { border-color: var(--brand-accent); }
+
+/* Tableaux de données dans les leçons */
+.data-table-wrap { overflow-x: auto; margin: 12px 0; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+.data-table caption { text-align: left; padding: 0 0 8px; font-weight: 700; color: var(--brand-ink); }
+.data-table th, .data-table td { padding: 8px 12px; border-bottom: 1px solid var(--border-color); text-align: right; }
+.data-table th:first-child, .data-table td:first-child { text-align: left; }
+.data-table thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); }
+
+/* Formule mise en avant */
+.formula { margin: 16px 0; padding: 14px 18px; border-left: 4px solid var(--brand-primary); background: var(--brand-primary-soft); border-radius: 0 var(--radius-control) var(--radius-control) 0; font-family: var(--font-display); font-size: 18px; color: var(--brand-ink); }
+
+/* Arbre de jeu (liste imbriquée) */
+.tree { margin: 16px 0; overflow-x: auto; }
+.tree ul { list-style: none; margin: 0; padding-left: 22px; border-left: 2px solid var(--border-color); }
+.tree > ul { border-left: 0; padding-left: 0; }
+.tree li { margin: 8px 0; }
+.node { display: inline-block; padding: 6px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-control); background: var(--bg-panel); font-size: 14px; line-height: 1.4; }
+.node-max { border-color: var(--brand-primary); font-weight: 700; color: var(--brand-ink); }
+.node.leaf { background: var(--brand-primary-soft); }
+.node b { color: var(--brand-primary); font-variant-numeric: tabular-nums; }
+.tree-value { margin: 4px 0 0; font-size: 13px; color: var(--text-muted); }
+
+/* Jalons et étapes numérotées */
+.timeline, .steps-list { margin: 8px 0; padding-left: 22px; display: grid; gap: 12px; line-height: 1.6; }
+.timeline li::marker, .steps-list li::marker { color: var(--brand-primary); font-weight: 700; }
+
+/* Tableaux de texte : alignement à gauche */
+.table-text th, .table-text td { text-align: left; vertical-align: top; }
+
+/* Frise en cartes */
+.timeline--cards { list-style: none; padding: 0; gap: 14px; }
+.timeline--cards li { display: grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-panel); }
+.tl-year { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--brand-primary); font-variant-numeric: tabular-nums; }
+.timeline--cards h3 { margin: 0 0 4px; font-size: 17px; color: var(--brand-ink); }
+.timeline--cards p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--text-muted); }
+@media (max-width: 560px) { .timeline--cards li { grid-template-columns: 1fr; gap: 4px; } }

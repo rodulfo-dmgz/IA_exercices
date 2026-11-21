@@ -1,0 +1,7 @@
+/* État vide (contenu à venir) */
+
+.empty-state {
+  display: flex; align-items: center; gap: 12px; margin: 0;
+  color: var(--text-muted); font-size: 15px;
+}
+.empty-state i { font-size: 24px; color: var(--brand-accent); }

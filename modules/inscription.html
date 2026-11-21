@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faisons connaissance</title>
+  <link rel="stylesheet" href="/src/css/main.css">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+</head>
+<body class="page-stage page-inscription" data-public>
+
+  <div class="login-page-wrapper">
+    <main class="login-layout">
+
+      <section class="login-brand-card" aria-label="Identité RD IA">
+        <div class="login-brand-content">
+          <img class="login-brand__logo" src="/assets/images/logo.svg" alt="RD Formation" width="160" height="160">
+          <h2 class="login-brand__name">RD <span>IA</span></h2>
+          <p class="login-brand__tagline">Découverte de l'intelligence artificielle</p>
+          <p class="login-brand__slogan">Un parcours interactif, guidé par MEXA</p>
+        </div>
+      </section>
+
+      <section class="login-form-card" aria-labelledby="form-title">
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Passer en thème sombre" title="Thème sombre">
+          <i class="ph-duotone ph-moon" aria-hidden="true"></i>
+        </button>
+
+        <form class="login-form" id="name-form" novalidate>
+          <div>
+            <h1 class="login-form__title" id="form-title">Faisons connaissance</h1>
+            <p class="login-form__subtitle">Dites-nous comment vous appeler</p>
+          </div>
+
+          <fieldset class="field civilite">
+            <legend>Civilité <span class="req" aria-hidden="true">*</span></legend>
+            <div class="segmented">
+              <label class="segment">
+                <input type="radio" name="civilite" value="Mme" aria-describedby="civilite-error">
+                <span>Madame</span>
+              </label>
+              <label class="segment">
+                <input type="radio" name="civilite" value="M" aria-describedby="civilite-error">
+                <span>Monsieur</span>
+              </label>
+            </div>
+            <p class="field-error" id="civilite-error" role="alert"></p>
+          </fieldset>
+
+          <div class="field">
+            <label for="prenom">Prénom <span class="req" aria-hidden="true">*</span></label>
+            <div class="input-icon">
+              <i class="ph-duotone ph-user" aria-hidden="true"></i>
+              <input class="form-control" id="prenom" name="prenom" type="text" autocomplete="given-name"
+                     maxlength="60" required aria-required="true" placeholder="Votre prénom" aria-describedby="prenom-error">
+            </div>
+            <p class="field-error" id="prenom-error" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="nom">Nom de famille <span class="optional">(facultatif)</span></label>
+            <div class="input-icon">
+              <i class="ph-duotone ph-identification-card" aria-hidden="true"></i>
+              <input class="form-control" id="nom" name="nom" type="text" autocomplete="family-name"
+                     maxlength="60" placeholder="Votre nom de famille">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-cta btn-lg">
+            <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i> Commencer le parcours
+          </button>
+
+          <!-- Package SCORM : le lien n'apparaît que si le fichier existe -->
+          <a class="login-link" id="scorm-link" href="../downloads/intelligentsia-scorm.zip" download hidden>
+            <i class="ph-duotone ph-download-simple" aria-hidden="true"></i> Télécharger le package SCORM
+          </a>
+          <p class="login-note login-note--soon" id="scorm-soon" hidden>
+            <i class="ph-duotone ph-package" aria-hidden="true"></i> Package SCORM bientôt disponible
+          </p>
+
+          <p class="login-note">Ces informations restent sur votre appareil : rien n'est envoyé ni conservé. La civilité sert à accorder les textes au féminin ou au masculin. <a href="mentions.html">Mentions légales</a></p>
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="/src/js/inscription.js"></script>
+</body>
+</html>

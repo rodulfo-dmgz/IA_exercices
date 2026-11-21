@@ -1,0 +1,63 @@
+/* Cartes, panneaux, listes */
+
+.info-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; margin-bottom: 48px;
+}
+
+.info-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 20px; background-color: var(--bg-panel);
+  border: 1px solid var(--border-color); border-radius: var(--radius-lg);
+  box-shadow: 0 2px 8px rgb(18 53 91 / 2%);
+}
+
+.info-item i {
+  flex: none; font-size: 24px; color: var(--brand-primary);
+  background-color: var(--brand-primary-soft);
+  padding: 10px; border-radius: 50%; margin-top: -4px;
+}
+
+.info-label {
+  margin: 0 0 4px; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+}
+
+.info-value { margin: 0; font-size: 15px; font-weight: 500; color: var(--brand-ink); }
+
+.panel {
+  padding: 32px; background-color: var(--bg-panel);
+  border: 1px solid var(--border-color); border-radius: var(--radius-lg);
+  box-shadow: 0 4px 16px rgb(18 53 91 / 3%);
+}
+
+.panel-title {
+  margin: 0 0 16px; font-family: var(--font-display);
+  font-size: 24px; font-weight: 700; letter-spacing: -0.01em; color: var(--brand-ink);
+}
+
+.panel-text {
+  margin: 0 0 24px; max-width: 65ch; font-size: 15px; color: var(--text-muted);
+}
+
+.checklist { display: grid; gap: 12px; }
+
+.checklist li {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px; color: var(--rd-text);
+}
+
+.checklist i {
+  font-size: 20px; color: var(--brand-primary);
+}
+
+.panel-accent { /* plus de trait de couleur à gauche : une carte reste une carte */ }
+
+@media (max-width: 640px) {
+  .panel { padding: 24px 20px; }
+}
+
+/* Ligne d'accueil personnalisée (prénom) */
+.greeting { color: var(--brand-primary); font-weight: 600; }
+.greeting i { color: var(--brand-accent); vertical-align: -0.15em; }

@@ -1,0 +1,18 @@
+/* Blocs vidéo */
+
+.video-block { margin: 0 auto 48px; max-width: 900px; }
+
+.video-frame {
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  background-color: #0d1117; border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card);
+}
+
+.video-block-page .video-frame { 
+  background-color: var(--bg-panel); 
+  box-shadow: 0 0 0 1px var(--border-color), var(--shadow-card); 
+}
+
+.video-frame iframe {
+  position: absolute; inset: -2px; width: calc(100% + 4px); height: calc(100% + 4px); border: 0;
+}

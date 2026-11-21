@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glossaire</title>
+  <link rel="stylesheet" href="/src/css/main.css">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+</head>
+<body class="page-stage page-carnet">
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">RESSOURCES</p>
+          <h1 class="page-title">Glossaire</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <div class="panel">
+      <p class="panel-text">Les termes clés du parcours, avec la séance où chacun est expliqué.</p>
+
+      <div class="gloss-tools">
+        <label class="gloss-search"><span class="sr-only">Rechercher un terme</span>
+          <i class="ph-duotone ph-magnifying-glass" aria-hidden="true"></i>
+          <input id="gloss-search" type="search" placeholder="Rechercher un terme ou un mot de la définition" autocomplete="off">
+        </label>
+        <div class="gloss-filters" role="group" aria-label="Filtrer par module">
+          <button type="button" class="chip" data-mod="" aria-pressed="true">Tous</button>
+          <button type="button" class="chip" data-mod="1" aria-pressed="false">Module 1</button>
+          <button type="button" class="chip" data-mod="2" aria-pressed="false">Module 2</button>
+          <button type="button" class="chip" data-mod="3" aria-pressed="false">Module 3</button>
+        </div>
+      </div>
+      <p class="gloss-count" id="gloss-count" role="status" aria-live="polite"></p>
+      <div id="gloss-list"></div>
+      <p id="gloss-empty" class="panel-text" hidden>Essayez un autre mot, ou retirez le filtre de module.</p>
+    </div>
+  </main>
+
+  <script type="module" src="/src/js/glossaire.js"></script>
+  <script type="module" src="/src/js/profile.js"></script>
+  <script type="module" src="/src/js/page-header.js"></script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+/* Barre latérale : cadre, navigation, sous-menus, pied, mode replié */
+
+/* 3. Sidebar --------------------------------------------------------------- */
+.sidebar {
+  position: sticky;
+  top: var(--gutter);
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--gutter) * 2);
+  height: calc(100dvh - var(--gutter) * 2);
+  background-color: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sidebar);
+  box-shadow: var(--shadow-sidebar);
+  overflow: hidden;
+  user-select: none;
+  transition: width var(--duration) var(--ease);
+}
+
+.sidebar.collapsed { width: var(--sidebar-collapsed-width); }
+.nav-item .label { transition: opacity 150ms ease; }
+
+.sidebar-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  min-height: var(--sidebar-cell);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 0 0 0 13px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--brand-primary);
+  white-space: nowrap;
+  transition: opacity 150ms ease;
+}
+
+.sidebar.collapsed .logo-text { opacity: 0; }
+
+.sidebar-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.sidebar-scroll::-webkit-scrollbar { width: 0; height: 0; }
+
+/* 4. Navigation ------------------------------------------------------------ */
+.nav-group { border-bottom: 1px solid var(--border-color); }
+
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: var(--sidebar-row-height);
+  height: auto;
+  padding: 10px 16px;
+  color: var(--rd-text);
+  font-size: 14px;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: background-color 120ms ease;
+}
+
+.nav-item:hover { background-color: var(--bg-hover); }
+.nav-item:focus-visible { outline-offset: -2px; }
+
+.nav-item.active,
+.nav-item[aria-current="page"] {
+  background-color: var(--bg-active);
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+
+/* Style de l'icône Phosphor dans la nav */
+.nav-item i {
+  flex: none;
+  font-size: 20px;
+  color: var(--text-muted);
+  transition: color 120ms ease;
+}
+.nav-item.active i,
+.nav-item:hover i {
+  color: var(--brand-primary);
+}
+
+.nav-item .label {
+  flex: none;
+  width: 160px;
+  white-space: normal;
+  overflow-wrap: normal;
+}
+
+/* 5. Sidebar footer -------------------------------------------------------- */
+.sidebar-footer {
+  flex: 0 0 auto;
+  display: flex;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-sidebar);
+}
+
+.footer-btn {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--sidebar-row-height);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--rd-text);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.footer-btn:hover { background-color: var(--bg-hover); }
+.footer-btn:focus-visible { outline-offset: -2px; }
+.footer-btn + .footer-btn { border-left: 1px solid var(--border-color); }
+
+.footer-btn i { font-size: 20px; color: var(--text-muted); }
+.footer-btn:hover i { color: var(--brand-primary); }
+
+.sidebar.collapsed .sidebar-footer { flex-direction: column; }
+.sidebar.collapsed .footer-btn { flex: none; width: 100%; height: var(--sidebar-cell); }
+.sidebar.collapsed .footer-btn + .footer-btn {
+  border-left: 0; border-top: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   12. Navigation hiérarchique (Sous-menus)
+   ========================================================================== */
+.nav-parent {
+  display: flex;
+  flex-direction: column;
+}
+
+/* La ligne parente qui contient le lien (gauche) et la flèche (droite) */
+.nav-item--parent-row {
+  gap: 0;   /* l'écart de .nav-item poussait la flèche hors de la barre */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0; /* On gère le padding à l'intérieur */
+  transition: background-color 120ms ease;
+}
+
+.nav-item--parent-row:hover {
+  background-color: var(--bg-hover);
+}
+
+/* Le lien à gauche (prend toute la place sauf la flèche) */
+.nav-parent-link {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 10px 0 10px 21px;
+  text-decoration: none;
+  color: inherit;
+  gap: 14px;
+}
+
+.nav-parent-link .nav-item-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+/* Le bouton de la flèche à droite */
+.nav-toggle-btn {
+  flex: none;
+  transition: opacity 150ms ease, visibility 150ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 100%;
+  min-height: 44px; /* Assure une zone cliquable confortable */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0;   /* l'icône est centrée : ~18 px d'air à droite */
+}
+
+.nav-toggle-btn:hover {
+  color: var(--brand-primary);
+}
+
+/* La flèche elle-même */
+.nav-chevron {
+  font-size: 22px;
+  line-height: 1;
+  transition: transform 0.25s var(--ease-out), color var(--duration) var(--ease);
+}
+
+/* Quand c'est ouvert, la flèche se retourne (vers le haut) */
+.nav-item--parent-row.open .nav-chevron {
+  transform: rotate(180deg);
+  color: var(--brand-primary);
+}
+
+/* État actif du parent (si on a cliqué sur le lien parent) */
+.nav-item--parent-row.active {
+  background-color: var(--bg-active);
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+.nav-item--parent-row.active i {
+  color: var(--brand-primary);
+}
+
+/* Conteneur des sous-items */
+.nav-children {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  margin: 4px 12px 8px 24px;
+  padding-left: 12px;
+  border-left: 2px solid var(--border-color);
+}
+.nav-children.open {
+  display: flex;
+}
+
+/* Sous-item (lien enfant) */
+.nav-item--child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: var(--radius-control);
+  transition: all 0.15s ease;
+}
+
+.nav-item--child:hover {
+  background-color: var(--bg-hover);
+  color: var(--rd-text);
+}
+
+.nav-item--child.active {
+  background-color: var(--brand-primary-soft);
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+
+.nav-item--child .label { width: 150px; }
+/* Lignes avec flèche : le libellé laisse la place au bouton (56 px) — sinon il déborde de la barre */
+.nav-parent-link .label { width: 146px; }
+
+.nav-item--child i {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+.nav-item--child.active i {
+  color: var(--brand-primary);
+}
+
+/* Lien direct (Accueil) */
+.nav-item--single {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px 10px 21px;
+  text-decoration: none;
+  color: var(--rd-text);
+  transition: background-color 120ms ease;
+}
+.nav-item--single .nav-item-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+.nav-item--single:hover {
+  background-color: var(--bg-hover);
+}
+.nav-item--single.active {
+  background-color: var(--bg-active);
+  font-weight: 600;
+  color: var(--brand-primary);
+}
+.nav-item--single.active i {
+  color: var(--brand-primary);
+}
+
+/* Mode replié : les icônes ne bougent pas (colonne de 64 px), les libellés se fondent
+   et la barre les rogne (overflow: hidden). Un clic sur un parent déplie la barre
+   (voir shell.js) pour atteindre les sous-menus. */
+.sidebar.collapsed .nav-item .label { opacity: 0; }
+.sidebar.collapsed .nav-toggle-btn { opacity: 0; visibility: hidden; }
+.sidebar.collapsed .nav-children { display: none; }
+
+/* Petit écran : la barre dépliée recouvre le contenu au lieu de le pousser.
+   Dans le flux, elle garde la largeur de la barre repliée. */
+@media (max-width: 720px) {
+  .sidebar { z-index: 50; }
+  .sidebar:not(.collapsed) {
+    margin-right: calc(var(--sidebar-collapsed-width) - var(--sidebar-width));
+    box-shadow: 0 8px 32px rgb(18 53 91 / 25%);
+  }
+}
+
+/* Mode inscription (démo web) : pas de barre latérale tant que le prénom n'est pas saisi */
+html.gate-pending .sidebar { visibility: hidden; }
+body.page-shell.is-gate { gap: 0; }
+body.page-shell.is-gate .sidebar,
+body.page-shell.is-gate .skip-link { display: none; }

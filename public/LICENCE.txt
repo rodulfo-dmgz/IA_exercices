@@ -1,0 +1,44 @@
+INTELLIGENTSIA : COMPRENDRE L'IA
+================================
+
+© 2026 Rodulfo DOMINGUEZ JIMENEZ, R.D FORMATION
+Entrepreneur individuel, SIREN 900 763 913, SIRET 900 763 913 00010
+R.D FORMATION, 34070 Montpellier, France
+
+LICENCE D'UTILISATION
+---------------------
+Les textes, exercices, schémas, questions d'évaluation et le code de ce cours
+sont mis à disposition sous licence Creative Commons Attribution 4.0
+International (CC BY 4.0).
+
+Texte officiel : https://creativecommons.org/licenses/by/4.0/deed.fr
+Texte juridique complet : https://creativecommons.org/licenses/by/4.0/legalcode.fr
+
+QUI PEUT L'UTILISER ?
+Tout le monde, y compris à titre commercial.
+
+CE QUI EST PERMIS
+- Utiliser, diffuser, intégrer le cours dans une plateforme de formation.
+- Copier, partager, modifier et adapter le cours.
+
+LA SEULE CONDITION : CITER L'AUTEUR
+Il faut mentionner l'auteur, indiquer le lien vers la licence et signaler
+les modifications éventuelles. Exemple :
+
+  « Intelligentsia : comprendre l'IA », par Rodulfo DOMINGUEZ JIMENEZ
+  (R.D FORMATION), licence CC BY 4.0,
+  https://creativecommons.org/licenses/by/4.0/deed.fr
+
+ÉLÉMENTS DE TIERS
+-----------------
+Cette licence ne couvre pas les éléments de tiers (icônes, bibliothèques,
+polices, illustration). Voir CREDITS.txt : ils restent soumis à leurs
+propres licences.
+
+DONNÉES PERSONNELLES
+--------------------
+Ce cours ne collecte ni ne conserve aucune donnée personnelle et n'utilise
+aucun cookie. Dans une plateforme de formation, les données de suivi sont
+traitées par l'organisme qui exploite la plateforme.
+
+Aucune garantie n'est donnée sur ce cours, fourni à titre pédagogique.

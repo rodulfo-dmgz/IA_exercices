@@ -1,0 +1,205 @@
+/* Séances de leçon (module 1 : ia-*.html) */
+
+.page-lecon .content { max-width: 900px; }
+.page-lecon section + section { margin-top: 0; }
+.page-lecon .panel + .panel { margin-top: 24px; }
+.page-lecon #activite, .page-lecon #quiz { margin-top: 24px; }
+.page-lecon .panel-text + .panel-text { margin-top: -8px; }
+.page-lecon .panel-text { max-width: 70ch; }
+.page-lecon h3 { font-family: var(--font-display); color: var(--brand-ink); }
+
+/* Objectifs */
+.objectives { margin-top: 8px; padding: 16px 20px; border-radius: var(--radius-md); background: var(--surface-subtle); border: 1px solid var(--border-color); }
+.objectives h3 { margin: 0 0 10px; font-size: 15px; }
+
+/* Exemples */
+.example-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 8px 0 20px; }
+.example-card { padding: 20px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); }
+.example-card h3 { margin: 12px 0 8px; font-size: 17px; }
+.example-card p { margin: 0 0 10px; font-size: 14px; line-height: 1.55; color: var(--text-muted); }
+.example-card .example-impact { margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--border-color); color: var(--rd-text); }
+.example-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--brand-primary-soft); }
+.example-icon i { font-size: 24px; line-height: 1; color: var(--brand-primary); }
+
+.reflect { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 0; padding: 14px 16px; border-radius: var(--radius-md); background: var(--brand-accent-soft); color: var(--rd-text); }
+.reflect i { flex: none; font-size: 22px; line-height: 1.2; color: var(--cta); }
+:root.dark .reflect { background: color-mix(in srgb, var(--brand-accent) 14%, transparent); }
+
+/* Raisons numérotées : typographie éditoriale, séparées par de simples filets */
+.reasons { margin: 0; padding: 0; list-style: none; counter-reset: reason; }
+.reasons li {
+  display: grid; grid-template-columns: 56px 1fr; gap: 4px 16px;
+  padding: 20px 0; border-top: 1px solid var(--border-color);
+  counter-increment: reason;
+}
+.reasons li:first-child { border-top: 0; padding-top: 4px; }
+.reasons li::before {
+  content: counter(reason, decimal-leading-zero);
+  grid-row: span 2;
+  font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1.1;
+  color: var(--brand-accent);
+}
+.reasons h3 { margin: 0; font-size: 18px; line-height: 1.3; }
+.reasons p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--text-muted); }
+
+/* Termes clés : un glossaire, pas des cartes — le terme à gauche, sa définition à droite */
+.key-terms { display: grid; grid-template-columns: 1fr; gap: 0; margin: 4px 0 8px; }
+.key-term {
+  display: grid; grid-template-columns: minmax(150px, 0.38fr) 1fr; align-items: baseline; gap: 4px 32px;
+  padding: 18px 0; border-top: 1px solid var(--border-color);
+}
+.key-term:first-child { border-top: 0; padding-top: 4px; }
+.key-term-label { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } /* « Terme clé » reste lu par les lecteurs d'écran */
+.key-term h3 { display: block; margin: 0; font-size: 19px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; color: var(--brand-ink); }
+.key-term h3 i { display: none; }
+.key-term p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--rd-text); }
+@media (max-width: 640px) { .key-term { grid-template-columns: 1fr; gap: 6px; } }
+
+/* « À retenir » : un simple aplat doux, sans filet ni pictogramme */
+.note-card { margin-top: 20px; padding: 18px 22px; background: var(--surface-subtle); border: 0; border-radius: var(--radius-md); }
+.note-card h3 { margin: 0 0 8px; font-family: var(--font-sans); font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--brand-primary); }
+.note-card h3 i { display: none; }
+.note-card p, .note-card li { margin: 0; font-size: 15px; line-height: 1.6; color: var(--rd-text); }
+.note-card ul { display: grid; gap: 10px; padding-left: 18px; list-style: disc; }
+
+/* Poupées russes */
+.nesting { margin: 8px 0 20px; }
+.nest { padding: 14px 16px 16px; border: 2px solid var(--brand-primary); border-radius: var(--radius-lg); background: color-mix(in srgb, var(--brand-primary) 4%, var(--bg-panel)); }
+.nest > span { display: block; margin-bottom: 10px; font-family: var(--font-display); font-weight: 700; color: var(--brand-primary); }
+.nest-2 { border-color: var(--brand-secondary); }
+.nest-2 > span { color: var(--brand-secondary-deep); }
+.nest-3 { border-color: var(--brand-accent); }
+.nest-3 > span { color: var(--cta); }
+.nest-4 { background: var(--brand-primary); border-color: var(--brand-primary); padding-bottom: 14px; }
+.nest-4 > span { margin: 0; color: var(--on-primary); }
+:root.dark .nest-2 > span { color: var(--brand-secondary); }
+
+/* Exercice de classement */
+.sort-list { display: grid; gap: 14px; margin: 16px 0 0; padding: 0; list-style: none; }
+.sort-item { padding: 16px 18px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-panel); }
+.sort-item > p:first-child { margin: 0 0 12px; font-weight: 500; }
+.sort-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.sort-actions .btn { padding: 8px 16px; font-size: 14px; }
+.sort-item .feedback { margin-top: 12px; font-weight: 500; }
+.sort-actions .btn[aria-disabled="true"] { cursor: default; opacity: .65; }
+.sort-actions .btn.is-picked { opacity: 1; border-color: var(--brand-primary); background: var(--brand-primary-soft); }
+.sort-actions .btn.is-right { opacity: 1; border-color: var(--success); box-shadow: 0 0 0 1px var(--success); }
+.sort-score { min-height: 24px; margin: 18px 0 0; font-weight: 600; color: var(--text-muted); }
+.sort-score.is-done { color: var(--brand-primary); }
+
+/* Navigation entre séances */
+.lesson-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 32px; }
+.source-note { margin: 28px 0 0; padding-top: 16px; border-top: 1px solid var(--border-color); font-size: 12px; line-height: 1.5; color: var(--text-muted); }
+
+/* ── Allègement : fini les cartes dans la carte, les pastilles d'icônes et les traits de couleur ── */
+
+/* Objectifs : un simple filet, pas une boîte */
+.objectives { margin-top: 8px; padding: 20px 0 0; background: none; border: 0; border-top: 1px solid var(--border-color); border-radius: 0; }
+
+/* Exemples : trois colonnes séparées par des filets fins */
+.example-grid { gap: 0; margin: 4px 0 24px; }
+.example-card { padding: 4px 28px; background: none; border: 0; border-left: 1px solid var(--border-color); border-radius: 0; }
+.example-card:first-child { padding-left: 0; border-left: 0; }
+.example-card:last-child { padding-right: 0; }
+.example-icon { display: block; width: auto; height: auto; background: none; border-radius: 0; }
+.example-icon i { font-size: 30px; }
+.example-card .example-impact { border-top: 0; padding-top: 0; margin-top: 12px; }
+@media (max-width: 760px) {
+  .example-card, .example-card:first-child, .example-card:last-child { padding: 20px 0; border-left: 0; border-top: 1px solid var(--border-color); }
+  .example-card:first-child { border-top: 0; padding-top: 4px; }
+}
+
+/* Exercices : lignes à plat séparées par des filets, boutons de choix sobres */
+.sort-list { gap: 0; }
+.sort-item { padding: 20px 0; background: none; border: 0; border-top: 1px solid var(--border-color); border-radius: 0; }
+.sort-item:first-child { border-top: 0; padding-top: 4px; }
+.sort-item > p:first-child { margin-bottom: 12px; font-size: 16px; }
+.sort-actions .btn { padding: 9px 16px; font-size: 14px; font-weight: 500; color: var(--rd-text); background: var(--bg-panel); border: 1px solid var(--border-strong); }
+.sort-actions .btn:hover:not([aria-disabled="true"]) { background: var(--bg-hover); border-color: var(--brand-primary); }
+.sort-actions .btn.is-picked { color: var(--brand-primary); background: var(--brand-primary-soft); border-color: var(--brand-primary); }
+.sort-actions .btn.is-right { border-color: var(--success); box-shadow: none; }
+.sort-score:empty { min-height: 0; margin: 0; }
+.lesson-nav a:only-child { margin-left: auto; }
+
+/* Image d'ouverture de séance (paysage 21:9). Le bloc reste gris (skeleton) le temps du chargement,
+   et disparaît si le fichier n'existe pas encore. */
+.lesson-hero { margin: 0 0 28px; overflow: hidden; border-radius: var(--radius-md); aspect-ratio: 21 / 9; background: var(--surface-subtle); animation: skeleton-pulse 1.8s ease-in-out infinite; }
+.lesson-hero img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.lesson-hero.is-loaded { animation: none; }
+
+/* ══ Images de séance : placement + format + taille (réglés par l'éditeur, voir tools/editor-plugin.js) ══
+   Format    : (21:9 par défaut) --wide 16:9 · --square 1:1 · --portrait 4:5 · --natural (sans recadrage)
+   Placement : bloc (par défaut, centré) · --float-left / --float-right (le texte l'habille) · --behind (derrière le texte)
+   Taille    : style="--w: 40%"   Contour : data-contour + --shape (le texte suit les formes d'une image à fond transparent)
+   Derrière  : --x / --y (position en %) et --o (opacité) */
+.lesson-hero { width: var(--w, var(--w-default, 100%)); max-width: 100%; margin-inline: auto; }
+.lesson-hero--wide { aspect-ratio: 16 / 9; }
+.lesson-hero--square { aspect-ratio: 1 / 1; --w-default: 46%; }
+.lesson-hero--portrait { aspect-ratio: 4 / 5; --w-default: 40%; }
+.lesson-hero--natural { aspect-ratio: auto; background: none; animation: none; border-radius: 0; }
+.lesson-hero--natural img { height: auto; object-fit: initial; }
+
+.lesson-hero--float-left, .lesson-hero--float-right { --w-default: 38%; margin-block: 4px 12px; }
+.lesson-hero--float-left { float: left; margin-right: 28px; margin-left: 0; }
+.lesson-hero--float-right { float: right; margin-left: 28px; margin-right: 0; }
+.lesson-hero[data-contour] { shape-outside: var(--shape); shape-margin: 18px; }
+.panel::after { content: ""; display: block; clear: both; }   /* la carte englobe toujours ses images flottantes */
+
+.panel:has(> .lesson-hero--behind) { position: relative; overflow: hidden; }
+.panel:has(> .lesson-hero--behind) > :not(.lesson-hero--behind) { position: relative; z-index: 1; }
+.lesson-hero--behind {
+  --w-default: 40%;
+  position: absolute; z-index: 0; left: var(--x, 78%); top: var(--y, 8%); transform: translateX(-50%);
+  margin: 0; opacity: var(--o, 0.22); pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .lesson-hero--float-left, .lesson-hero--float-right { float: none; width: 100%; margin: 0 0 16px; }
+}
+
+/* Blocs de texte : colonnes et largeur de lecture (réglés par l'éditeur : data-cols, data-measure) */
+[data-cols="2"] { column-count: 2; column-gap: 36px; }
+[data-cols="3"] { column-count: 3; column-gap: 32px; }
+@media (max-width: 760px) { [data-cols] { column-count: 1; } }
+[data-measure="narrow"] { max-width: 52ch; }
+[data-measure="full"] { max-width: none; }
+
+/* Alignement (data-align) : le bloc se place aussi, sinon un texte centré dans une colonne étroite paraît décentré */
+[data-align="center"]  { text-align: center; margin-inline: auto; }
+[data-align="right"]   { text-align: right;  margin-inline-start: auto; }
+[data-align="justify"] { text-align: justify; hyphens: auto; text-wrap: pretty; }
+/* Justifié + dernière ligne : « justifié centré » (data-last) ; le bloc se centre/aligne comme son dernier rang */
+[data-align="justify"][data-last="center"] { text-align-last: center; margin-inline: auto; }
+[data-align="justify"][data-last="right"]  { text-align-last: right;  margin-inline-start: auto; }
+[data-align="center"] .checklist, [data-align="right"] .checklist { text-align: start; }
+
+/* ══ Zone libre : une « diapositive » où images et textes se placent n'importe où (réglée par l'éditeur) ══
+   Tout est en % de la zone et en cqw (1 % de sa largeur) : la mise en page se redimensionne avec l'écran.
+   .free   : --ratio (16 / 9, 4 / 3, 1 / 1…) · data-bg (card, soft, accent, dark)
+   .free-item : --x --y --w (en %) · --z (ordre) · --o (opacité) · --rad (arrondi) · --r (rotation)
+   .free-text : --fs (taille, en cqw) · --fw · --c · --ta · data-font (display, sans, mono) · data-italic */
+.free { position: relative; width: 100%; aspect-ratio: var(--ratio, 16 / 9); container-type: inline-size; overflow: hidden; border-radius: var(--radius-md); margin: 0 0 28px; }
+.free[data-bg="card"] { background: var(--bg-panel); border: 1px solid var(--border-color); }
+.free[data-bg="soft"] { background: var(--brand-primary-soft); }
+.free[data-bg="accent"] { background: var(--brand-accent-soft); }
+.free[data-bg="dark"] { background: var(--brand-deep); --free-ink: #fff; }
+.free-item { position: absolute; left: var(--x, 10%); top: var(--y, 10%); width: var(--w, 30%); z-index: var(--z, 1); margin: 0; opacity: var(--o, 1); transform: rotate(var(--r, 0deg)); }
+.free-item img { display: block; width: 100%; height: auto; border-radius: var(--rad, 0); }
+.free-text { font-size: calc(var(--fs, 2.2) * 1cqw); font-weight: var(--fw, 400); line-height: 1.25; color: var(--c, var(--free-ink, var(--rd-text))); text-align: var(--ta, left); font-family: var(--font-sans); overflow-wrap: anywhere; }
+.free-text[data-font="display"] { font-family: var(--font-display); letter-spacing: -0.01em; }
+.free-text[data-font="mono"] { font-family: var(--font-mono); }
+.free-text[data-italic] { font-style: italic; }
+
+/* Schéma en trois temps (ex. test de Turing) : boîtes reliées par des flèches, en colonne sur petit écran */
+.process-diagram { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; gap: 12px; margin: 24px 0; }
+.diagram-box { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 18px 18px 20px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+.diagram-box i { font-size: 28px; line-height: 1; color: var(--brand-primary); }
+.diagram-box h3 { margin: 4px 0 0; font-family: var(--font-display); font-size: 17px; line-height: 1.3; color: var(--brand-ink); }
+.diagram-box p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--text-muted); }
+.diagram-box--accent { border-color: var(--brand-primary); background: var(--brand-primary-soft); }
+.diagram-arrow { display: grid; place-items: center; color: var(--text-muted); }
+.diagram-arrow i { font-size: 26px; }
+@media (max-width: 760px) {
+  .process-diagram { grid-template-columns: 1fr; gap: 8px; }
+  .diagram-arrow i { transform: rotate(90deg); }
+}

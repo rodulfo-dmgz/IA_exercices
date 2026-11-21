@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 2 : Mettre un problème en fiche</title>
+  <link rel="stylesheet" href="/src/css/main.css">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+</head>
+<body class="page-stage page-lecon" data-steps>
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">MODULE 2 • SÉANCE 1</p>
+          <h1 class="page-title">Mettre un problème en fiche</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <section id="lecon">
+      <div class="panel">
+        <h2 class="panel-title">La fiche avant l'algorithme</h2>
+        <figure class="lesson-hero" style="--w: 80%">
+          <img src="/assets/images/modules/pb-formuler-mwazyw95.webp" alt="" width="1680" height="720" decoding="async"
+               onload="this.closest('figure').classList.add('is-loaded')"
+               onerror="this.closest('figure').hidden = true">
+        </figure>
+        <p class="panel-text">
+          Pour qu'un programme trouve seul une solution, il faut d'abord lui décrire le problème sans rien laisser au hasard. Les spécialistes le font avec une « fiche » de quatre lignes.
+          Cette séance apprend à la remplir : c'est l'étape la plus humaine, et celle qui fait le plus souvent échouer les projets.
+        </p>
+        <div class="objectives">
+          <h3>À la fin de cette séance, vous saurez</h3>
+          <ul class="checklist">
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> remplir la fiche : états, actions, but, coût ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> compter les états d'un problème simple ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> expliquer pourquoi le chemin direct n'est pas toujours le meilleur.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Les quatre lignes de la fiche</h2>
+        <div class="data-table-wrap">
+          <table class="data-table table-text">
+            <caption>Fiche de problème, remplie pour un trajet de livraison</caption>
+            <thead><tr><th scope="col">Ligne</th><th scope="col">Question</th><th scope="col">Pour le livreur</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">États</th><td>Qu'est-ce qui décrit complètement la situation ?</td><td>Le point où se trouve le camion (dépôt, gare, marché, parc, musée).</td></tr>
+              <tr><th scope="row">Actions</th><td>Qu'a-t-on le droit de faire, depuis un état ?</td><td>Emprunter un tronçon direct vers un lieu voisin.</td></tr>
+              <tr><th scope="row">But</th><td>Dans quel état le problème est-il résolu ?</td><td>Camion arrivé au musée.</td></tr>
+              <tr><th scope="row">Coût</th><td>Qu'essaie-t-on de réduire ?</td><td>La durée totale du trajet, en minutes.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="panel-text">Une <strong>transition</strong> est le passage direct d'un état à un autre par une seule action. Une suite de transitions forme un <strong>chemin</strong> : c'est lui qu'on cherche.</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">À essayer : le meilleur trajet</h2>
+        <p class="panel-text">Départ : la Gare. But : le Musée. Voici les tronçons directs et leur durée.</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <caption>Durée des tronçons</caption>
+            <thead><tr><th scope="col">Tronçon</th><th scope="col">Minutes</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Gare ↔ Musée</th><td>9</td></tr>
+              <tr><th scope="row">Gare ↔ Marché</th><td>2</td></tr>
+              <tr><th scope="row">Marché ↔ Parc</th><td>1</td></tr>
+              <tr><th scope="row">Gare ↔ Parc</th><td>4</td></tr>
+              <tr><th scope="row">Parc ↔ Musée</th><td>3</td></tr>
+              <tr><th scope="row">Marché ↔ Musée</th><td>8</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="panel-text">Cherchez le trajet le plus court avant d'ouvrir la réponse.</p>
+        <details class="act-details">
+          <summary>Voir la réponse</summary>
+          <p class="panel-text">Gare → Marché → Parc → Musée : 2 + 1 + 3 = <strong>6 minutes</strong>, contre 9 par le tronçon direct. Sans la ligne « coût », la machine ne pourrait pas comparer les chemins : elle s'arrêterait au premier qui arrive au but.</p>
+        </details>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Combien d'états, au juste ?</h2>
+        <p class="panel-text">Si une situation se décrit par plusieurs éléments indépendants, on <strong>multiplie</strong> leurs possibilités.</p>
+        <ul class="steps-list">
+          <li>Un cadenas à 3 interrupteurs : 2 × 2 × 2 = <strong>8</strong> états.</li>
+          <li>Avec 10 interrupteurs : 2<sup>10</sup> = <strong>1 024</strong> états.</li>
+          <li>Avec 30 : plus d'un milliard.</li>
+        </ul>
+        <aside class="note-card">
+          <h3>Un choix de conception</h3>
+          <p>Décider ce que l'état contient est une décision d'ingénierie. Trop détaillé, le nombre d'états explose et la recherche ne finit jamais. Trop simplifié, la solution trouvée ne vaut rien sur le terrain : un trajet « de lieu à lieu » ignore, par exemple, les embouteillages de l'heure de pointe.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="activite">
+      <div class="panel">
+        <h2 class="panel-title">Atelier : les deux jerricans</h2>
+        <p class="panel-text">
+          Un jerrican <strong>A de 3 litres</strong>, un jerrican <strong>B de 5 litres</strong>, une source d'eau. Objectif : obtenir <strong>exactement 4 litres</strong> dans l'un des deux, avec le moins de transitions possible.
+        </p>
+        <div data-jarres data-a="3" data-b="5" data-cible="4" data-min="6"></div>
+        <aside class="note-card">
+          <h3>La fiche de cet atelier</h3>
+          <p><strong>États :</strong> le couple (litres dans A, litres dans B), soit 4 × 6 = 24 possibilités. <strong>Actions :</strong> remplir, vider ou verser. <strong>But :</strong> 4 L dans l'un des deux. <strong>Coût :</strong> 1 par transition.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="panel panel-accent" data-assessment="m2-s1"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <a class="btn btn-outline btn-lg" href="ia-philosophie.html"><i class="ph-duotone ph-arrow-circle-left" aria-hidden="true"></i> Séance précédente</a>
+      <a class="btn btn-primary btn-lg" href="pb-histoire.html">Séance suivante : cinq repères historiques <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i></a>
+    </div>
+  </main>
+
+  <script type="module" src="/src/js/activites/jarres.js"></script>
+  <script type="module" src="/src/js/quiz.js"></script>
+  <script type="module" src="/src/js/profile.js"></script>
+  <script type="module" src="/src/js/page-header.js"></script>
+  <script type="module" src="/src/js/steps.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+/* Auto-évaluations (src/js/quiz.js). Statut = icône + texte, la couleur ne fait que renforcer. */
+
+.quiz-best { display: flex; align-items: center; gap: 8px; margin: 0 0 20px; padding: 10px 14px; width: fit-content; border-radius: var(--radius-control); background: var(--surface-subtle); border: 1px solid var(--border-color); color: var(--brand-ink); font-size: 14px; }
+.quiz-best[hidden] { display: none; }
+.quiz-readonly { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 16px; padding: 12px 14px; border-radius: var(--radius-control); background: var(--surface-subtle); border: 1px solid var(--border-color); border-left: 4px solid var(--brand-secondary-deep, var(--brand-secondary)); color: var(--rd-text); font-size: 14px; }
+.quiz-readonly i { font-size: 20px; flex: none; color: var(--brand-secondary-deep, var(--brand-secondary)); }
+.quiz-best i { font-size: 20px; color: var(--brand-secondary-deep, var(--brand-secondary)); }
+
+.quiz-form { display: grid; gap: 20px; }
+.quiz-q { margin: 0; padding: 18px 20px 20px; min-width: 0; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-panel); }
+.quiz-q legend { padding: 0 6px; font-weight: 600; color: var(--brand-ink); line-height: 1.45; float: left; width: 100%; margin-bottom: 12px; padding: 0; }
+.quiz-q legend + * { clear: both; }
+.quiz-num { display: block; margin-bottom: 4px; font-family: var(--font-mono, inherit); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+.quiz-hint { margin: 0 0 10px; font-size: 13px; color: var(--text-muted); }
+.quiz-hint:empty { display: none; }
+
+.quiz-options { display: grid; gap: 8px; }
+.quiz-option { display: flex; gap: 12px; align-items: flex-start; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-control); cursor: pointer; line-height: 1.45; transition: border-color .15s, background-color .15s; }
+.quiz-option:hover { border-color: var(--brand-primary); }
+.quiz-option:has(input:checked) { border-color: var(--brand-primary); background: var(--brand-primary-soft); }
+.quiz-option:has(input:focus-visible) { outline: 3px solid var(--brand-primary); outline-offset: 2px; }
+.quiz-option input { margin-top: 4px; flex: none; accent-color: var(--brand-primary); }
+.quiz-option b { color: var(--brand-primary); margin-right: 2px; }
+
+.quiz-field { display: flex; align-items: center; gap: 10px; max-width: 320px; }
+.quiz-input { flex: 1; min-height: 44px; padding: 8px 12px; font: inherit; color: var(--rd-text); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-control); }
+.quiz-input:focus-visible { outline: 3px solid var(--brand-primary); outline-offset: 1px; border-color: var(--brand-primary); }
+.quiz-unit { color: var(--text-muted); font-weight: 600; }
+
+.quiz-q:disabled { opacity: 1; }
+.quiz-q:disabled .quiz-option { cursor: default; }
+.quiz-q.is-ok { border-color: var(--success); }
+.quiz-q.is-ko { border-color: var(--danger); }
+.quiz-result:empty { display: none; }
+.quiz-result { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border-color); }
+.quiz-verdict { margin: 0 0 6px; font-weight: 700; display: flex; gap: 8px; align-items: flex-start; }
+.quiz-verdict i { font-size: 22px; flex: none; }
+.is-ok .quiz-verdict { color: var(--success); }
+.is-ko .quiz-verdict { color: var(--danger); }
+.quiz-why { margin: 0; color: var(--text-muted); font-size: 14px; line-height: 1.55; }
+
+.quiz-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+.quiz-actions[hidden] { display: none; }
+
+.quiz-summary { margin-top: 24px; padding: 20px 22px; border-radius: var(--radius-md); border: 2px solid var(--border-color); background: var(--surface-subtle); }
+.quiz-summary:focus-visible { outline: 3px solid var(--brand-primary); outline-offset: 2px; }
+.quiz-summary.is-ok { border-color: var(--success); }
+.quiz-summary.is-ko { border-color: var(--danger); }
+.quiz-score { display: flex; align-items: center; gap: 12px; margin: 0 0 6px; font-size: 18px; color: var(--brand-ink); }
+.quiz-score i { font-size: 32px; flex: none; }
+.quiz-summary.is-ok .quiz-score i { color: var(--success); }
+.quiz-summary.is-ko .quiz-score i { color: var(--danger); }
+.quiz-note { margin: 0 0 16px; color: var(--text-muted); font-size: 14px; }
+
+/* ── Impression : seul le corrigé s'imprime ── */
+.print-sheet { display: none; }
+.print-only { display: none; }
+
+@media print {
+  @page { margin: 18mm 16mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+
+  body[data-print="quiz"] main.content > :not(#quiz) { display: none !important; }
+  body[data-print="quiz"] #quiz [data-assessment] > :not(.print-sheet) { display: none !important; }
+  body[data-print="quiz"] #quiz, body[data-print="quiz"] #quiz .panel { display: block !important; border: 0 !important; box-shadow: none !important; background: none !important; padding: 0 !important; margin: 0 !important; }
+  body[data-print="quiz"] #quiz .print-sheet { display: block; }
+  body[data-print="quiz"] main.content { max-width: none; padding: 0; margin: 0; }
+
+  .print-sheet h1 { font-size: 20pt; margin: 0 0 4pt; }
+  .print-meta, .print-foot { color: #444; font-size: 10pt; }
+  .print-score { font-size: 13pt; margin: 8pt 0 14pt; }
+  .print-sheet ol { padding-left: 18pt; }
+  .print-sheet li { margin-bottom: 12pt; break-inside: avoid; }
+  .print-sheet li p { margin: 0 0 3pt; font-size: 11pt; line-height: 1.4; }
+  .print-why { color: #333; font-style: italic; }
+  .print-foot { margin-top: 18pt; border-top: 1px solid #999; padding-top: 6pt; }
+}
+
+/* ── Félicitations (fin de module / de parcours) ── */
+.quiz-congrats { display: flex; gap: 12px; align-items: flex-start; margin: 12px 0; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: var(--radius-control); background: var(--bg-panel); color: var(--brand-ink); line-height: 1.5; }
+.quiz-congrats i { font-size: 28px; flex: none; color: var(--brand-primary); }
+.quiz-congrats.is-ok { border-color: var(--success); }
+.quiz-congrats.is-ok i { color: var(--success); }
+.quiz-congrats a { color: var(--brand-primary); font-weight: 600; }
+
+/* ── Consultation des corrigés (sans note) ── */
+.quiz-verdict--info { color: var(--brand-primary); }
+.quiz-q.is-answer { border-color: var(--brand-primary); }
+.quiz-option.is-right { border-color: var(--success); background: color-mix(in srgb, var(--success) 8%, var(--bg-panel)); }
+.quiz-flag { margin-left: auto; padding-left: 12px; font-style: normal; font-size: 13px; font-weight: 700; color: var(--success); white-space: nowrap; }

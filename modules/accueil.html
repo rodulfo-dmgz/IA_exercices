@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accueil et consignes</title>
+  <link rel="stylesheet" href="/src/css/main.css">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+</head>
+<body class="page-stage page-accueil">
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">ACCUEIL</p>
+          <h1 class="page-title">Accueil et consignes</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="panel hero-text">
+        <h2 class="panel-title" id="hero-title">Bonjour<span data-needs-user hidden>, <span data-user="prenom"></span></span> !</h2>
+        <p class="panel-text">
+          Ce parcours vous aide à comprendre ce que fait l'IA, ce qu'elle ne fait pas, et comment elle raisonne. Aucun prérequis technique.
+        </p>
+        <p class="panel-text">
+          <strong>MEXA</strong>, votre guide virtuelle, vous accueille : appuyez d'abord sur le bouton <strong>lecture ▶</strong> pour l'écouter, puis cliquez sur <strong>Commencer</strong>.
+        </p>
+        <div class="accueil-actions">
+          <a class="btn btn-primary btn-lg" href="ia-definir.html">
+            <span>Commencer</span> <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i>
+          </a>
+          <button type="button" class="btn btn-outline btn-lg" id="start-tour">
+            <i class="ph-duotone ph-compass" aria-hidden="true"></i> <span>Visite guidée complète</span>
+          </button>
+        </div>
+      </div>
+      <div class="hero-mexa">
+        <div id="mexa-slot"></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="how-title">
+      <h2 class="section-title" id="how-title">Chaque séance, trois temps</h2>
+      <ol class="how">
+        <li><i class="ph-duotone ph-book-open" aria-hidden="true"></i><div><h3>Lisez</h3><p>Une leçon courte, en diaporama ou en lecture continue.</p></div></li>
+        <li><i class="ph-duotone ph-hand-pointing" aria-hidden="true"></i><div><h3>Manipulez</h3><p>Un atelier pour essayer par vous-même.</p></div></li>
+        <li><i class="ph-duotone ph-exam" aria-hidden="true"></i><div><h3>Testez-vous</h3><p>Une auto-évaluation. Votre meilleure note est conservée.</p></div></li>
+      </ol>
+      <p class="how-note">Votre progression est enregistrée : vous reprendrez où vous vous étiez arrêté<span data-m="" data-f="e" data-n="·e"></span>.</p>
+      <button type="button" class="link-button" id="change-profile" hidden>Changer de profil</button>
+    </section>
+    <p class="legal-foot">© 2026 Rodulfo DOMINGUEZ JIMENEZ, R.D FORMATION · Licence <a href="https://creativecommons.org/licenses/by/4.0/deed.fr" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> : utilisation libre, en citant l'auteur · <a href="mentions.html">Mentions légales</a></p>
+  </main>
+
+  <script type="module" src="/src/js/accueil.js"></script>
+  <script type="module" src="/src/js/profile.js"></script>
+  <script type="module" src="/src/js/page-header.js"></script>
+</body>
+</html>

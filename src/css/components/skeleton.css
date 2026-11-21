@@ -1,0 +1,26 @@
+/* Skeletons (chargement) — esprit shadcn/ui : blocs gris qui pulsent */
+
+.skeleton {
+  display: block;
+  background: var(--surface-subtle);
+  border-radius: 8px;
+  animation: skeleton-pulse 1.8s ease-in-out infinite;
+}
+:root.dark .skeleton { background: rgb(226 232 240 / 10%); }
+.skeleton--circle { border-radius: 50%; }
+.skeleton--line { height: 12px; border-radius: 6px; }
+
+@keyframes skeleton-pulse { 50% { opacity: .5; } }
+
+/* Squelette de la zone de cours, affiché par la coquille pendant le chargement d'une page */
+.stage-skeleton {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; flex-direction: column; gap: 20px;
+  padding: 32px 40px;
+  background: var(--bg-app);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.stage-skeleton .sk-head { display: grid; gap: 12px; padding-bottom: 16px; border-bottom: 3px solid var(--border-color); }
+.stage-skeleton .sk-card { display: grid; gap: 12px; padding: 28px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-lg); }
+@media (max-width: 640px) { .stage-skeleton { padding: 20px 16px; } }

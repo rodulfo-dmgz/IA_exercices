@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Intelligentsia — Découverte de l'IA</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#1f4590">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast');if(!localStorage.getItem('rd_profile'))d.classList.add('gate-pending')}catch(e){}</script>
+</head>
+<body class="page-shell" data-public>
+
+  <a class="skip-link" href="#stage">Aller au contenu du cours</a>
+
+  <aside class="sidebar collapsed" id="sidebar" aria-label="Menu latéral">
+    <div class="sidebar-header">
+      <a class="logo" href="modules/accueil.html" target="stage" aria-label="RD FORMATION — Accueil">
+        <img class="logo-mark" src="/assets/images/logo.svg" alt="" width="36" height="36" onerror="this.style.display='none'">
+        <span class="logo-text">RD FORMATION</span>
+      </a>
+    </div>
+
+    <div class="sidebar-scroll">
+      <nav aria-label="Navigation principale">
+        <ul class="nav-group" id="nav">
+          <!-- Le menu sera généré par shell.js -->
+        </ul>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button type="button" class="footer-btn" id="tour-btn" aria-label="Guide du cours" title="Guide du cours">
+        <i class="ph-duotone ph-compass" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="footer-btn" id="theme-btn" aria-label="Passer en thème sombre" title="Thème sombre">
+        <i class="ph-duotone ph-sun" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="footer-btn" id="contrast-btn" aria-label="Contraste élevé" aria-pressed="false" title="Contraste élevé">
+        <i class="ph-duotone ph-circle-half" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="footer-btn" id="toggle-btn" aria-label="Déplier le menu" aria-expanded="false" title="Réduire / déplier le menu">
+        <i class="ph-duotone ph-sidebar-simple" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="footer-btn" id="exit-btn" aria-label="Quitter le cours" title="Quitter le cours">
+        <i class="ph-duotone ph-sign-out" aria-hidden="true"></i>
+      </button>
+    </div>
+  </aside>
+
+  <main class="content content-stage">
+    <iframe id="stage" name="stage" class="stage" title="Contenu du cours" src="about:blank"></iframe>
+
+    <!-- Squelette affiché pendant le chargement d'une page (voir shell.js) -->
+    <div class="stage-skeleton" id="stage-skeleton" hidden role="status">
+      <span class="sr-only">Chargement du contenu…</span>
+      <div class="sk-head" aria-hidden="true">
+        <span class="skeleton skeleton--line" style="width: 120px"></span>
+        <span class="skeleton" style="width: min(420px, 70%); height: 36px"></span>
+      </div>
+      <div class="sk-card" aria-hidden="true">
+        <span class="skeleton" style="width: 40%; height: 24px"></span>
+        <span class="skeleton skeleton--line" style="width: 95%"></span>
+        <span class="skeleton skeleton--line" style="width: 88%"></span>
+        <span class="skeleton skeleton--line" style="width: 70%"></span>
+      </div>
+      <div class="sk-card" aria-hidden="true">
+        <span class="skeleton" style="width: 30%; height: 24px"></span>
+        <span class="skeleton" style="width: 100%; height: 96px"></span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Guide : ce qu'il reste à faire + revoir un point (voir tour.js) -->
+  <div class="guide-screen" id="guide" hidden role="dialog" aria-modal="true" aria-labelledby="guide-title">
+    <div class="guide-card">
+      <div class="guide-head">
+        <h2 id="guide-title"><i class="ph-duotone ph-compass" aria-hidden="true"></i> Guide du cours</h2>
+        <button type="button" class="guide-close" id="guide-close" aria-label="Fermer le guide"><i class="ph-duotone ph-x" aria-hidden="true"></i></button>
+      </div>
+      <section aria-labelledby="guide-todo-title">
+        <h3 id="guide-todo-title">Ce qu'il me reste à faire</h3>
+        <ul class="guide-todo" id="guide-todo"></ul>
+        <button type="button" class="btn btn-primary" id="guide-next"></button>
+      </section>
+      <section aria-labelledby="guide-topics-title">
+        <h3 id="guide-topics-title">Revoir un point</h3>
+        <p class="guide-help">Inutile de refaire toute la visite : choisissez ce qui vous intéresse.</p>
+        <div class="guide-topics">
+          <button type="button" class="btn btn-outline" data-topic="menu"><i class="ph-duotone ph-sidebar-simple" aria-hidden="true"></i> Le menu</button>
+          <button type="button" class="btn btn-outline" data-topic="seance"><i class="ph-duotone ph-book-open" aria-hidden="true"></i> Une séance (modes, atelier, évaluation)</button>
+          <button type="button" class="btn btn-outline" data-topic="bilan"><i class="ph-duotone ph-chart-bar" aria-hidden="true"></i> Mon bilan et mes notes</button>
+          <button type="button" class="btn btn-outline" data-topic="confort"><i class="ph-duotone ph-circle-half" aria-hidden="true"></i> Confort de lecture</button>
+          <button type="button" class="btn btn-outline" data-topic="quitter"><i class="ph-duotone ph-sign-out" aria-hidden="true"></i> Quitter le cours</button>
+          <button type="button" class="btn btn-outline" data-topic="depart"><i class="ph-duotone ph-play-circle" aria-hidden="true"></i> Comment démarrer</button>
+          <button type="button" class="btn btn-outline" data-topic="tout"><i class="ph-duotone ph-arrow-counter-clockwise" aria-hidden="true"></i> Toute la visite</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Écran affiché après « Quitter le cours » (voir shell.js) -->
+  <div class="exit-screen" id="exit-screen" hidden role="dialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-text">
+    <div class="exit-card">
+      <i class="ph-duotone ph-check-circle exit-icon" aria-hidden="true"></i>
+      <h2 id="exit-title">Session terminée</h2>
+      <p id="exit-text">Votre progression et vos notes sont enregistrées. Vous pouvez fermer cet onglet ou revenir à votre plateforme.</p>
+      <div class="exit-actions">
+        <button type="button" class="btn btn-primary btn-lg" id="exit-close">Fermer la fenêtre</button>
+        <button type="button" class="btn btn-outline btn-lg" id="exit-resume">Reprendre le cours</button>
+      </div>
+      <p class="exit-note" id="exit-note" hidden>Votre navigateur ne permet pas de fermer cette fenêtre automatiquement : fermez simplement l'onglet.</p>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

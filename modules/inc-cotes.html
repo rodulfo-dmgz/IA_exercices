@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 3 : Chiffrer le doute</title>
+  <link rel="stylesheet" href="/src/css/main.css">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+</head>
+<body class="page-stage page-lecon" data-steps>
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">MODULE 3 • SÉANCE 1</p>
+          <h1 class="page-title">Chiffrer le doute</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <section id="lecon">
+      <div class="panel">
+        <h2 class="panel-title">« Livraison demain, probablement »</h2>
+        <figure class="lesson-hero" style="--w: 80%">
+          <img src="/assets/images/modules/inc-cotes-mwb03mw9.webp" alt="" width="1680" height="720" decoding="async"
+               onload="this.closest('figure').classList.add('is-loaded')"
+               onerror="this.closest('figure').hidden = true">
+        </figure>
+        <p class="panel-text">
+          Un transporteur annonce : « votre colis arrivera demain, à 80 % de chances ». Que vaut cette phrase ? Peut-on la vérifier ? Et comment une machine peut-elle s'en servir pour décider ?
+          C'est la question de ce module : agir malgré le doute, en le mesurant plutôt qu'en l'ignorant.
+        </p>
+        <div class="objectives">
+          <h3>À la fin de cette séance, vous saurez</h3>
+          <ul class="checklist">
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> écrire une même chance en fréquence, en cote et en probabilité ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> convertir une cote en probabilité, et inversement ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> juger une prévision sans conclure trop vite.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Trois écritures d'une même chance</h2>
+        <div class="data-table-wrap">
+          <table class="data-table table-text">
+            <caption>« 4 colis sur 5 arrivent à l'heure », de trois façons</caption>
+            <thead><tr><th scope="col">Écriture</th><th scope="col">Comment ça se lit</th><th scope="col">Ici</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Fréquence naturelle</th><td>Sur combien de cas, combien se produisent</td><td>4 sur 5</td></tr>
+              <tr><th scope="row">Cote</th><td>Cas favorables <em>contre</em> cas défavorables</td><td>4:1</td></tr>
+              <tr><th scope="row">Probabilité</th><td>Part des cas favorables <em>dans le total</em></td><td>80 % (ou 0,8)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="formula">probabilité = x / (x + y)  pour une cote x:y</p>
+        <p class="panel-text">Les fréquences naturelles (« 4 colis sur 5 ») sont les plus faciles à se représenter : on se trompe moins avec elles qu'avec des pourcentages.</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">L'erreur classique : confondre cote et probabilité</h2>
+        <p class="panel-text">
+          Une cote de <strong>1:4</strong> signifie un cas favorable contre quatre défavorables, donc <strong>1 chance sur 5</strong>, soit 20 % : pas 25 %, comme on le croit souvent en lisant « 1 et 4 ».
+          Deux cotes sont égales quand leur rapport l'est : 4:1 = 8:2 = 40:10.
+        </p>
+        <aside class="note-card">
+          <h3>Réflexe</h3>
+          <p>Toujours se demander : « le deuxième nombre compte-t-il <em>le reste</em>, ou le <em>total</em> ? ». Dans une cote, c'est le reste. Dans une probabilité en fraction, c'est le total.</p>
+        </aside>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Peut-on vérifier une probabilité ?</h2>
+        <p class="panel-text">
+          Oui, mais pas avec un seul colis. Si le transporteur dit « 80 % » et que votre colis arrive en retard, on ne peut <strong>rien conclure</strong> : un cas sur cinq est en retard, c'est justement ce qu'il annonçait.
+        </p>
+        <p class="panel-text">
+          Pour juger, il faut regarder beaucoup de promesses du même niveau. Sur 50 colis annoncés « 80 % », on attend environ 40 livraisons à l'heure. Voir 25 ou 49 serait un signal que la probabilité annoncée est mal calibrée.
+          À l'inverse, annoncer « 0 % » puis livrer à l'heure est une erreur franche : un événement jugé impossible a eu lieu.
+        </p>
+        <aside class="note-card">
+          <h3>À retenir</h3>
+          <p>Une probabilité n'est ni vraie ni fausse sur un cas : elle se confronte à la réalité sur de nombreux cas. C'est ce qui permet de comparer des modèles entre eux, et de dire lequel est le plus fiable.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="activite">
+      <div class="panel">
+        <h2 class="panel-title">Atelier : convertir cotes et probabilités</h2>
+        <p class="panel-text">Modifiez les nombres. Essayez 4:1, puis 1:4, puis 25 %.</p>
+        <div data-cotes></div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="panel panel-accent" data-assessment="m3-s1"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <a class="btn btn-outline btn-lg" href="pb-jeux.html"><i class="ph-duotone ph-arrow-circle-left" aria-hidden="true"></i> Séance précédente</a>
+      <a class="btn btn-primary btn-lg" href="inc-bayes.html">Séance suivante : réviser une conviction <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i></a>
+    </div>
+  </main>
+
+  <script type="module" src="/src/js/activites/cotes.js"></script>
+  <script type="module" src="/src/js/quiz.js"></script>
+  <script type="module" src="/src/js/profile.js"></script>
+  <script type="module" src="/src/js/page-header.js"></script>
+  <script type="module" src="/src/js/steps.js"></script>
+</body>
+</html>

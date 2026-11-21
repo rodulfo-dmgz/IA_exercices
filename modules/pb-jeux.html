@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 2 : Jouer contre un adversaire</title>
+  <link rel="stylesheet" href="/src/css/main.css">
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+</head>
+<body class="page-stage page-lecon" data-steps>
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">MODULE 2 • SÉANCE 3</p>
+          <h1 class="page-title">Jouer contre un adversaire</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <section id="lecon">
+      <div class="panel">
+        <h2 class="panel-title">Quand l'autre joue aussi</h2>
+        <p class="panel-text">
+          Dans un problème de trajet, rien ne vous répond. Dans un jeu, si : chaque coup de l'adversaire change la situation. Il faut donc raisonner « si je joue ceci, il peut répondre cela ».
+          On traite ici le cas le plus net : deux joueurs, tout est visible, pas de hasard.
+        </p>
+        <div class="objectives">
+          <h3>À la fin de cette séance, vous saurez</h3>
+          <ul class="checklist">
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> dessiner l'arbre d'un petit jeu ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> remonter les valeurs avec la méthode minimax ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> expliquer pourquoi on estime au lieu de tout calculer.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Un jeu minuscule : les allumettes</h2>
+        <p class="panel-text">
+          Un tas d'allumettes. À tour de rôle, chacun en retire <strong>1 ou 2</strong>. Qui prend la <strong>dernière</strong> gagne.
+          Appelons <strong>Max</strong> le joueur qui veut une valeur élevée et <strong>Min</strong> celui qui la veut basse : +1 si Max gagne, −1 si Min gagne.
+        </p>
+        <p class="panel-text">Arbre pour 4 allumettes, Max commençant. Chaque nœud indique ce qu'il reste et à qui c'est le tour.</p>
+        <div class="tree" role="group" aria-label="Arbre du jeu des allumettes à 4 allumettes">
+          <ul>
+            <li><span class="node node-max">4 · tour de Max</span>
+              <ul>
+                <li><span class="node">retire 1 → 3 · tour de Min</span>
+                  <ul>
+                    <li><span class="node">retire 1 → 2 · tour de Max</span>
+                      <ul>
+                        <li><span class="node leaf">retire 2 : Max prend la dernière · <b>+1</b></span></li>
+                        <li><span class="node">retire 1 → 1 · Min prend la dernière · <b>−1</b></span></li>
+                      </ul>
+                      <p class="tree-value">Valeur = max(+1, −1) = <b>+1</b></p></li>
+                    <li><span class="node">retire 2 → 1 · tour de Max</span>
+                      <ul><li><span class="node leaf">retire 1 : Max prend la dernière · <b>+1</b></span></li></ul>
+                      <p class="tree-value">Valeur = <b>+1</b></p></li>
+                  </ul>
+                  <p class="tree-value">Min choisit le plus petit : min(+1, +1) = <b>+1</b></p></li>
+                <li><span class="node">retire 2 → 2 · tour de Min</span>
+                  <ul><li><span class="node leaf">retire 2 : Min prend la dernière · <b>−1</b></span></li>
+                      <li><span class="node">retire 1 → 1 · Max prend la dernière · <b>+1</b></span></li></ul>
+                  <p class="tree-value">Min choisit le plus petit : min(−1, +1) = <b>−1</b></p></li>
+              </ul>
+              <p class="tree-value">Max choisit le plus grand : max(+1, −1) = <b>+1</b></p></li>
+          </ul>
+        </div>
+        <p class="panel-text">À la racine, +1 : avec 4 allumettes, Max gagne s'il retire 1 pour en laisser 3. Ce chiffre est la <strong>valeur du jeu</strong> : le résultat quand les deux camps jouent au mieux.</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">La méthode minimax</h2>
+        <ol class="steps-list">
+          <li><strong>Noter les fins de partie</strong> : +1 si Max gagne, −1 si Min gagne, 0 pour un nul.</li>
+          <li><strong>Remonter</strong> : à un nœud de Max, garder la plus grande valeur des enfants ; à un nœud de Min, la plus petite.</li>
+          <li><strong>Jouer</strong> vers l'enfant de meilleure valeur pour soi.</li>
+        </ol>
+        <p class="panel-text">La méthode est optimale pour les jeux <strong>à deux joueurs</strong>, <strong>sans hasard</strong>, où <strong>tout est visible</strong> et où ce que gagne l'un, l'autre le perd. Avec des dés ou des cartes cachées, il faut raisonner autrement (module 3).</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Le mur de l'explosion combinatoire</h2>
+        <p class="panel-text">
+          Si chaque position offre <strong>b</strong> coups, regarder <strong>p</strong> coups à l'avance revient à examiner environ <strong>b<sup>p</sup></strong> positions. Quelques valeurs :
+        </p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <caption>Positions à examiner</caption>
+            <thead><tr><th scope="col">Coups d'avance</th><th scope="col">10 coups possibles</th><th scope="col">20 coups possibles</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">2</th><td>100</td><td>400</td></tr>
+              <tr><th scope="row">3</th><td>1 000</td><td>8 000</td></tr>
+              <tr><th scope="row">4</th><td>10 000</td><td>160 000</td></tr>
+              <tr><th scope="row">6</th><td>1 000 000</td><td>64 000 000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="panel-text">Un jeu de société classique offre souvent plusieurs dizaines de coups par position, certains jeux plusieurs centaines : explorer l'arbre jusqu'au bout est hors de portée de toute machine.</p>
+        <aside class="note-card">
+          <h3>La parade : estimer</h3>
+          <p>On s'arrête après un nombre de coups fixé et on attribue à la position une <strong>note estimée</strong> par une règle de jugement (une <em>fonction d'évaluation heuristique</em>). Aux dames, par exemple, on compare les pions et les dames de chaque camp. Plus la note est fine, plus la machine joue bien : tout le savoir-faire passe dans cette fonction.</p>
+        </aside>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Ce que minimax ne sait pas faire</h2>
+        <p class="panel-text">
+          Dans la réalité, l'issue d'une action n'est pas toujours certaine, et on ignore une partie des informations. Une recherche « parfaite » sur un monde imparfait donne de mauvais résultats : il faut mesurer l'incertitude. Rendez-vous au module 3.
+        </p>
+      </div>
+    </section>
+
+    <section id="activite">
+      <div class="panel">
+        <h2 class="panel-title">Atelier : affrontez minimax</h2>
+        <p class="panel-text">
+          La machine joue avec minimax et ne se trompe jamais. Si la position est gagnante pour elle, elle gagnera. À vous de découvrir la stratégie, ou d'activer l'aide pour voir ses valeurs.
+        </p>
+        <div data-nim data-start="7"></div>
+        <aside class="note-card">
+          <h3>Pour réfléchir</h3>
+          <p>Comparez 6 et 7 allumettes en jouant en premier. Quand pouvez-vous gagner à coup sûr ? Cherchez un lien avec les multiples de 3.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="panel panel-accent" data-assessment="m2-s3"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <a class="btn btn-outline btn-lg" href="pb-histoire.html"><i class="ph-duotone ph-arrow-circle-left" aria-hidden="true"></i> Séance précédente</a>
+      <a class="btn btn-primary btn-lg" href="inc-cotes.html">Module 3 : raisonner dans l'incertain <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i></a>
+    </div>
+  </main>
+
+  <script type="module" src="/src/js/activites/nim.js"></script>
+  <script type="module" src="/src/js/quiz.js"></script>
+  <script type="module" src="/src/js/profile.js"></script>
+  <script type="module" src="/src/js/page-header.js"></script>
+  <script type="module" src="/src/js/steps.js"></script>
+</body>
+</html>

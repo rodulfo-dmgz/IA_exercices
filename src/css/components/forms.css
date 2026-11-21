@@ -1,0 +1,13 @@
+/* Champs, quiz (fieldset + radios) */
+
+.form-control {
+  width: 100%; margin-top: 8px; padding: 12px; resize: vertical;
+  font: inherit; color: inherit; background: var(--bg-panel);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-control);
+}
+
+.quiz-fieldset { min-width: 0; margin: 24px 0 0; padding: 0; border: 0; }
+.quiz-fieldset legend { padding: 0; margin-bottom: 12px; font-weight: 600; }
+.quiz-options { display: flex; flex-direction: column; gap: 12px; }
+.quiz-options label { display: flex; align-items: center; gap: 8px; min-height: 24px; cursor: pointer; }
+.quiz-options input { accent-color: var(--brand-primary); }

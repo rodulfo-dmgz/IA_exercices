@@ -1,0 +1,10 @@
+/* Lien d'évitement */
+
+.skip-link {
+  position: fixed; top: 8px; left: 8px; z-index: 100;
+  padding: 10px 16px; border-radius: var(--radius-control);
+  background: var(--brand-primary); color: var(--on-primary);
+  font-weight: 600; text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }

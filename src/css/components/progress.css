@@ -1,0 +1,7 @@
+/* Barres et mesures de progression */
+
+.progress-track { width: 100%; height: 8px; background: var(--border-subtle); border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--brand-secondary); border-radius: 999px; width: 0%; transition: width 0.4s var(--ease-out); }
+
+.progress-meter { max-width: 400px; margin: 32px auto 0; text-align: left; }
+.progress-meter-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; font-weight: 600; }

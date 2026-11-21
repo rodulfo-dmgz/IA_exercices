@@ -1,0 +1,44 @@
+/* Visite guidée (Driver.js) : aux couleurs du design system */
+.driver-popover.rd-tour {
+  max-width: 360px; padding: 20px 22px 16px;
+  background: var(--bg-panel); color: var(--rd-text);
+  border: 1px solid var(--border-color); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card), 0 12px 40px rgb(18 53 91 / 18%);
+  font-family: var(--font-sans);
+}
+.rd-tour .driver-popover-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--brand-ink); }
+.rd-tour .driver-popover-description { margin-top: 8px; font-size: 14.5px; line-height: 1.55; color: var(--text-muted); }
+.rd-tour .driver-popover-progress-text { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+.rd-tour .driver-popover-footer { margin-top: 16px; gap: 8px; }
+.rd-tour .driver-popover-footer button {
+  min-height: 40px; padding: 0 18px; font: inherit; font-size: 14px; font-weight: 600;
+  border-radius: var(--radius-control); text-shadow: none; cursor: pointer;
+  transition: background-color .15s, box-shadow .15s;
+}
+/* Driver.js repasse tout bouton en #f7f7f7 au survol et au focus (spécificité 0,2,0) : on fixe chaque état, sinon le texte blanc devient illisible */
+.rd-tour .driver-popover-footer .driver-popover-next-btn,
+.rd-tour .driver-popover-footer .driver-popover-done-btn { background: var(--brand-primary); color: var(--on-primary); border: 1px solid var(--brand-primary); }
+.rd-tour .driver-popover-footer .driver-popover-next-btn:hover, .rd-tour .driver-popover-footer .driver-popover-next-btn:focus,
+.rd-tour .driver-popover-footer .driver-popover-done-btn:hover, .rd-tour .driver-popover-footer .driver-popover-done-btn:focus {
+  background: var(--brand-primary); color: var(--on-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 22%, transparent);
+}
+.rd-tour .driver-popover-footer .driver-popover-prev-btn { background: var(--bg-panel); color: var(--brand-primary); border: 1px solid var(--brand-primary); }
+.rd-tour .driver-popover-footer .driver-popover-prev-btn:hover, .rd-tour .driver-popover-footer .driver-popover-prev-btn:focus { background: var(--brand-primary-soft); color: var(--brand-primary); }
+.rd-tour .driver-popover-footer button:focus-visible { outline: 3px solid var(--brand-primary); outline-offset: 3px; }
+
+/* Croix de fermeture : zone de 32 px, anneau de focus resserré */
+.rd-tour .driver-popover-close-btn {
+  top: 10px; right: 10px; width: 32px; height: 32px; display: grid; place-items: center;
+  border-radius: var(--radius-control); font-size: 20px; line-height: 1; color: var(--text-muted);
+}
+.rd-tour .driver-popover-close-btn:hover { color: var(--brand-ink); background: var(--surface-subtle); }
+.rd-tour .driver-popover-close-btn:focus-visible { color: var(--brand-ink); outline: 3px solid var(--brand-primary); outline-offset: 0; }
+.rd-tour .driver-popover-title { padding-right: 28px; }
+.rd-tour .driver-popover-arrow-side-left.driver-popover-arrow { border-left-color: var(--bg-panel); }
+.rd-tour .driver-popover-arrow-side-right.driver-popover-arrow { border-right-color: var(--bg-panel); }
+.rd-tour .driver-popover-arrow-side-top.driver-popover-arrow { border-top-color: var(--bg-panel); }
+.rd-tour .driver-popover-arrow-side-bottom.driver-popover-arrow { border-bottom-color: var(--bg-panel); }
+
+.rd-tour .tour-list { margin: 4px 0 0; padding-left: 20px; display: grid; gap: 8px; }
+.rd-tour .driver-popover-description strong { color: var(--brand-ink); }
