@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 3 : Trier des tickets avec Bayes</title>
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+  <script type="module" crossorigin src="../assets/inc_naif-BddKVH0X.js"></script>
+  <link rel="modulepreload" crossorigin href="../assets/profile-C3BVnqfy.js">
+  <link rel="modulepreload" crossorigin href="../assets/toast-DVBwbw9T.js">
+  <link rel="modulepreload" crossorigin href="../assets/driver-BUGu8KT3.js">
+  <link rel="modulepreload" crossorigin href="../assets/notes-B_vowOOE.js">
+  <link rel="modulepreload" crossorigin href="../assets/exit-BiVslBBi.js">
+  <link rel="modulepreload" crossorigin href="../assets/steps-DubBdcfz.js">
+  <link rel="modulepreload" crossorigin href="../assets/page-header-BNAfIPCg.js">
+  <link rel="stylesheet" crossorigin href="../assets/profile-Ct0QLsbZ.css">
+  <link rel="stylesheet" crossorigin href="../assets/driver-Co0UYw8_.css">
+</head>
+<body class="page-stage page-lecon" data-steps>
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">MODULE 3 • SÉANCE 3</p>
+          <h1 class="page-title">Trier des tickets avec Bayes</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <section id="lecon">
+      <div class="panel">
+        <h2 class="panel-title">Un service d'assistance débordé</h2>
+        <p class="panel-text">
+          Chaque matin, le service d'assistance reçoit des centaines de tickets. Certains sont <strong>urgents</strong> (un client est bloqué), d'autres <strong>courants</strong>. Un tri manuel prend des heures.
+          Peut-on confier ce tri à un programme qui apprend de tickets déjà classés ? Oui, avec une méthode étonnamment simple : le <strong>classifieur bayésien naïf</strong>.
+        </p>
+        <div class="objectives">
+          <h3>À la fin de cette séance, vous saurez</h3>
+          <ul class="checklist">
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> estimer un rapport de vraisemblance à partir de comptages ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> classer un message en multipliant les rapports mot après mot ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> expliquer pourquoi on le dit « naïf » et à quoi sert un plancher.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Étape 1 : compter les mots dans chaque pile</h2>
+        <p class="panel-text">
+          On met d'un côté les tickets urgents déjà traités, de l'autre les courants, et l'on compte combien de fois chaque mot apparaît dans chaque pile.
+        </p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <caption>Occurrences des mots dans les tickets triés</caption>
+            <thead><tr><th scope="col">Mot</th><th scope="col">Urgents</th><th scope="col">Courants</th><th scope="col">Rapport</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">panne</th><td>160</td><td>80</td><td>8</td></tr>
+              <tr><th scope="row">bloqué</th><td>120</td><td>40</td><td>12</td></tr>
+              <tr><th scope="row">merci</th><td>50</td><td>800</td><td>0,25</td></tr>
+              <tr><th scope="row">facture</th><td>100</td><td>400</td><td>1</td></tr>
+              <tr><th scope="row">serveur</th><td>40</td><td>0</td><td>50 (voir étape 3)</td></tr>
+              <tr><th scope="row">Total de mots</th><td>40 000</td><td>160 000</td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="panel-text">
+          Pour « panne » : 160 mots sur 40 000 chez les urgents (0,004), 80 sur 160 000 chez les courants (0,0005). Le <strong>rapport de vraisemblance</strong> est 0,004 ÷ 0,0005 = <strong>8</strong> : le mot est huit fois plus fréquent côté urgents.
+          « Merci » penche vers les courants (0,25). « Facture » vaut 1 : ce mot ne départage rien.
+        </p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Étape 2 : classer un nouveau ticket</h2>
+        <p class="panel-text">On part d'une cote de départ : un ticket urgent pour quatre courants, soit <strong>1:4 = 0,25</strong>. Puis on multiplie par le rapport de chaque mot reconnu :</p>
+        <p class="formula">« panne bloqué » : 0,25 × 8 × 12 = 24</p>
+        <p class="panel-text">Cote postérieure 24 : le ticket est 24 fois plus probablement urgent que courant. Au-dessus de 1, on le classe « urgent ».</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Étape 3 : le piège des mots jamais vus</h2>
+        <p class="panel-text">
+          « Serveur » n'apparaît jamais chez les courants : 0 occurrence. Une probabilité nulle fausserait tout (on diviserait par zéro). On impose donc une <strong>valeur plancher</strong> minuscule, par exemple 1 chance sur 50 000.
+          Le rapport devient (40 / 40 000) ÷ (1 / 50 000) = <strong>50</strong> : un mot jamais vu côté courant est un indice très fort, sans bloquer le calcul.
+        </p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Pourquoi « naïf » ?</h2>
+        <p class="panel-text">
+          La méthode traite chaque mot comme un indice indépendant des autres : elle ignore l'ordre des mots et les liens entre eux. « Panne de serveur » et « serveur de panne » reçoivent la même note.
+          C'est une simplification volontaire, fausse dans le détail, mais qui donne souvent de bons résultats parce que beaucoup de mots clés suffisent à trancher.
+        </p>
+        <aside class="note-card">
+          <h3>Ce qu'il faut retenir du module</h3>
+          <ul>
+            <li>On peut chiffrer le doute : fréquences, cotes, probabilités.</li>
+            <li>La règle de Bayes révise une cote : postérieure = rapport × antérieure.</li>
+            <li>Un signal fort ne rend pas probable un événement très rare.</li>
+            <li>Un classifieur naïf enchaîne ces multiplications mot après mot.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="activite">
+      <div class="panel">
+        <h2 class="panel-title">Atelier : trier des tickets</h2>
+        <p class="panel-text">Tapez un message avec les mots du tableau, ou choisissez un exemple. Suivez la cote à chaque mot ; les autres mots sont ignorés.</p>
+        <div data-tickets></div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="panel panel-accent" data-assessment="m3-s3"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <a class="btn btn-outline btn-lg" href="inc-bayes.html"><i class="ph-duotone ph-arrow-circle-left" aria-hidden="true"></i> Séance précédente</a>
+      <a class="btn btn-primary btn-lg" href="bilan.html">Voir mon bilan <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i></a>
+    </div>
+  </main>
+
+</body>
+</html>

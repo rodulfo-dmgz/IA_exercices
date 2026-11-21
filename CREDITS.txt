@@ -1,0 +1,14 @@
+CRÉDITS ET COMPOSANTS DE TIERS
+==============================
+
+Ces éléments ne sont PAS couverts par la licence CC BY 4.0 du cours
+(voir LICENCE.txt) : ils conservent leur propre licence.
+
+- Phosphor Icons (icônes)                : licence MIT
+- Driver.js (visite guidée)              : licence MIT
+- GSAP / GreenSock (animations de MEXA)  : licence GSAP « Standard » (gratuite)
+- Cabinet Grotesk, Switzer (polices)     : ITF Free Font License, via Fontshare
+- Space Mono (police)                    : SIL Open Font License 1.1
+- Illustration de la séance 1.1          : À COMPLÉTER (auteur et licence)
+
+Les textes des licences des polices sont dans assets/fonts/licences/.

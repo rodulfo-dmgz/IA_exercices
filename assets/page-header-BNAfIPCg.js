@@ -1,0 +1,1 @@
+var e=document.querySelector(`.page-header`);if(e){let t=!1,n=()=>{t=!1;let n=Math.min(1,Math.max(0,window.scrollY/120));e.style.setProperty(`--p`,n.toFixed(3)),e.classList.toggle(`is-stuck`,n>.02)};window.addEventListener(`scroll`,()=>{t||(t=!0,requestAnimationFrame(n))},{passive:!0}),n()}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="darkreader-lock">   <!-- le cours a son propre thème sombre : pas de recoloration par extension -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Module 3 : Réviser une conviction (règle de Bayes)</title>
+  <script>try{var d=document.documentElement,s=localStorage.getItem('rd_theme');if(s==='dark'||(s!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))d.classList.add('dark');if(localStorage.getItem('rd_contrast')==='1')d.classList.add('high-contrast')}catch(e){}</script>
+  <script type="module" crossorigin src="../assets/inc_bayes-D21O225C.js"></script>
+  <link rel="modulepreload" crossorigin href="../assets/profile-C3BVnqfy.js">
+  <link rel="modulepreload" crossorigin href="../assets/toast-DVBwbw9T.js">
+  <link rel="modulepreload" crossorigin href="../assets/driver-BUGu8KT3.js">
+  <link rel="modulepreload" crossorigin href="../assets/notes-B_vowOOE.js">
+  <link rel="modulepreload" crossorigin href="../assets/exit-BiVslBBi.js">
+  <link rel="modulepreload" crossorigin href="../assets/steps-DubBdcfz.js">
+  <link rel="modulepreload" crossorigin href="../assets/page-header-BNAfIPCg.js">
+  <link rel="stylesheet" crossorigin href="../assets/profile-Ct0QLsbZ.css">
+  <link rel="stylesheet" crossorigin href="../assets/driver-Co0UYw8_.css">
+</head>
+<body class="page-stage page-lecon" data-steps>
+
+  <main class="content">
+    <header class="page-header" id="page-header">
+      <div class="content-header">
+        <div class="content-heading">
+          <p class="eyebrow">MODULE 3 • SÉANCE 2</p>
+          <h1 class="page-title">Réviser une conviction : la règle de Bayes</h1>
+        </div>
+      </div>
+      <hr class="divider">
+    </header>
+
+    <section id="lecon">
+      <div class="panel">
+        <h2 class="panel-title">L'alerte de l'équipe antifraude</h2>
+        <p class="panel-text">
+          Une banque surveille ses paiements. Un détecteur automatique lève une alerte sur l'un d'eux. L'analyste doit décider : bloquer ou laisser passer ?
+          Pour cela, elle doit répondre à une seule question : <strong>après cette alerte, quelle est la probabilité que le paiement soit frauduleux ?</strong>
+        </p>
+        <div class="objectives">
+          <h3>À la fin de cette séance, vous saurez</h3>
+          <ul class="checklist">
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> calculer la valeur d'une alerte avec des nombres entiers ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> appliquer la règle de Bayes sous forme de cotes ;</li>
+            <li><i class="ph-duotone ph-check-circle" aria-hidden="true"></i> reconnaître l'oubli de la fréquence de base.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Étape 1 : compter sur 1 000 paiements</h2>
+        <ul class="steps-list">
+          <li>Sur <strong>1 000</strong> paiements, <strong>2</strong> sont frauduleux et <strong>998</strong> sont normaux.</li>
+          <li>Le détecteur signale <strong>90 %</strong> des fraudes : 1,8 alerte justifiée (on peut dire « environ 2 »).</li>
+          <li>Il signale aussi, à tort, <strong>3 %</strong> des paiements normaux : environ <strong>30</strong> fausses alertes.</li>
+        </ul>
+        <p class="panel-text">Parmi les quelque 32 alertes, seules 2 sont de vraies fraudes. <strong>La probabilité de fraude après alerte est d'environ 6 %.</strong> Beaucoup trouvent ce chiffre contre-intuitif : le détecteur semble fiable à 90 %.</p>
+        <aside class="note-card">
+          <h3>L'oubli de la fréquence de base</h3>
+          <p>Quand un test paraît fiable, on oublie de regarder la rareté de ce qu'il cherche. Un signal fort ne rend pas probable un événement très rare : il le rend seulement <em>plus</em> probable qu'avant.</p>
+        </aside>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Étape 2 : le raccourci des cotes</h2>
+        <p class="panel-text">Le même raisonnement tient en une multiplication, utile quand les nombres deviennent grands ou qu'il y a plusieurs signaux.</p>
+        <div class="data-table-wrap">
+          <table class="data-table table-text">
+            <caption>Les trois ingrédients</caption>
+            <thead><tr><th scope="col">Ingrédient</th><th scope="col">Ce que c'est</th><th scope="col">Ici</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Cote antérieure</th><td>La cote avant l'information</td><td>2:998</td></tr>
+              <tr><th scope="row">Rapport de vraisemblance</th><td>Probabilité du signal si fraude ÷ probabilité du signal si paiement normal</td><td>0,90 ÷ 0,03 = 30</td></tr>
+              <tr><th scope="row">Cote postérieure</th><td>La cote après l'information</td><td>2:998 × 30 = 60:998</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="formula">cote postérieure = rapport de vraisemblance × cote antérieure</p>
+        <p class="panel-text">Soit 60 / (60 + 998) ≈ <strong>5,7 %</strong>, ce qui confirme l'estimation d'ordre de grandeur de l'étape 1.</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Et s'il y a un second signal ?</h2>
+        <p class="panel-text">
+          La cote postérieure devient la <strong>nouvelle cote antérieure</strong>, que l'on multiplie par le rapport de vraisemblance du signal suivant. C'est exactement le principe du classifieur de la séance 3.
+        </p>
+      </div>
+    </section>
+
+    <section id="activite">
+      <div class="panel">
+        <h2 class="panel-title">Atelier : le détecteur de fraude</h2>
+        <p class="panel-text">
+          Faites varier la rareté de la fraude, la sensibilité du détecteur et ses fausses alertes. Observez la part des alertes qui sont de vraies fraudes (en orange). Que se passe-t-il quand la fraude devient moins rare ?
+        </p>
+        <div data-bayes></div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="panel panel-accent" data-assessment="m3-s2"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <a class="btn btn-outline btn-lg" href="inc-cotes.html"><i class="ph-duotone ph-arrow-circle-left" aria-hidden="true"></i> Séance précédente</a>
+      <a class="btn btn-primary btn-lg" href="inc-naif.html">Séance suivante : trier des tickets <i class="ph-duotone ph-arrow-circle-right" aria-hidden="true"></i></a>
+    </div>
+  </main>
+
+</body>
+</html>

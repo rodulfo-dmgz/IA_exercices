@@ -1,0 +1,1 @@
+function e(){try{if(window.parent&&window.parent!==window)return window.parent.postMessage({quit:!0},location.origin),!0}catch{}return!1}function t(){return window.parent&&window.parent!==window}export{e as n,t};
