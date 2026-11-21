@@ -1,0 +1,57 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, LVL1]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # --- PARTIE MAIN (Vite) ---
+      - name: Checkout main
+        if: github.ref == 'refs/heads/main'
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        if: github.ref == 'refs/heads/main'
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install & Build main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy main to root
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          keep_files: true
+          commit_message: "Deploy main ${{ github.sha }}"
+
+      # --- PARTIE LVL1 (Fichiers statiques) ---
+      - name: Checkout LVL1
+        if: github.ref == 'refs/heads/LVL1'
+        uses: actions/checkout@v5
+
+      - name: Deploy LVL1 to /LVL1/
+        if: github.ref == 'refs/heads/LVL1'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./          # On publie le dossier tel quel
+          destination_dir: LVL1    # ⚠️ Majuscules respectées ici !
+          keep_files: true
+          commit_message: "Deploy LVL1 ${{ github.sha }}"
