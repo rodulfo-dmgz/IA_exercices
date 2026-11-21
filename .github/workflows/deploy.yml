@@ -8,28 +8,27 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      # --- PARTIE MAIN (Vite) ---
+      - name: Checkout main
+        if: github.ref == 'refs/heads/main'
         uses: actions/checkout@v5
 
       - name: Setup Node.js
+        if: github.ref == 'refs/heads/main'
         uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
+      - name: Install & Build main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          npm ci
+          npm run build
 
       - name: Deploy main to root
         if: github.ref == 'refs/heads/main'
@@ -41,13 +40,18 @@ jobs:
           keep_files: true
           commit_message: "Deploy main ${{ github.sha }}"
 
-      - name: Deploy LVL1 to /lvl1/
+      # --- PARTIE LVL1 (Fichiers statiques) ---
+      - name: Checkout LVL1
+        if: github.ref == 'refs/heads/LVL1'
+        uses: actions/checkout@v5
+
+      - name: Deploy LVL1 to /LVL1/
         if: github.ref == 'refs/heads/LVL1'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./dist
-          destination_dir: lvl1
+          publish_dir: ./          # On publie le dossier tel quel
+          destination_dir: LVL1    # ⚠️ Majuscules respectées ici !
           keep_files: true
           commit_message: "Deploy LVL1 ${{ github.sha }}"
